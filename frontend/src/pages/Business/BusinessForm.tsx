@@ -1,18 +1,65 @@
 import React, { useState } from 'react';
 import Stepper from '@/components/ui/stepper';
 import BusinessInfo from '@/components/business/BusinessInfo';
+import BusinessOperation from '@/components/business/BusinessOperation';
+import BusinessActivity from '@/components/business/BusinessActivity';
+import OtherInfo from '@/components/business/OtherInfo';
+import Summary from '@/components/business/Summary';
+import BasicRequirements from '@/components/business/BasicRequirements';
+import Complete from '@/components/business/Complete';
 
 const BusinessForm: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState(3);
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 7;
+
+  const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, totalSteps));
+  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
+  const goToStep = (step: number) => {
+    if (step < currentStep) {
+      setCurrentStep(step);
+    }
+  };
+
   const steps = [
-    { label: 'COMPLETE\nBasic Documentary Requirements', status: 'complete' },
-    { label: 'COMPLETE\nBusiness Information', status: 'complete' },
-    { label: 'INCOMPLETE\nBusiness Information', status: 'current' },
-    { label: 'INCOMPLETE\nBusiness Operation', status: 'incomplete' },
-    { label: 'INCOMPLETE\nBusiness Activity', status: 'incomplete' },
-    { label: 'INCOMPLETE\nOther Required Information', status: 'incomplete' },
-    { label: 'INCOMPLETE\nSummary Page', status: 'incomplete' },
-  ];
+    'Complete',
+    'Basic Documentary Requirements',
+    'Business Information',
+    'Business Operation',
+    'Business Activity',
+    'Other Required Information',
+    'Summary Page',
+  ].map((label, index) => {
+      const stepNumber = index + 1;
+      let status: 'complete' | 'current' | 'incomplete' = 'incomplete';
+      if (stepNumber < currentStep) {
+          status = 'complete';
+      } else if (stepNumber === currentStep) {
+          status = 'current';
+      }
+      return { label, status };
+  });
+
+  const renderStep = () => {
+    const props = { nextStep, prevStep, currentStep, totalSteps };
+    switch (currentStep) {
+      case 1:
+        return <Complete {...props} />;
+      case 2:
+        return <BasicRequirements {...props} />;
+      case 3:
+        return <BusinessInfo {...props} />;
+      case 4:
+        return <BusinessOperation {...props} />;
+      case 5:
+        return <BusinessActivity {...props} />;
+      case 6:
+        return <OtherInfo {...props} />;
+      case 7:
+        return <Summary prevStep={prevStep} currentStep={currentStep} totalSteps={totalSteps} />;
+      default:
+        return <BusinessInfo {...props} />;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 sm:p-8">
@@ -28,10 +75,10 @@ const BusinessForm: React.FC = () => {
           <h1 className="text-2xl font-bold">UNIFIED ONLINE BUSINESS PERMIT APPLICATION</h1>
         </header>
         <div className="bg-white p-8 rounded-lg shadow-md">
-          <div className="mb-8">
-            <Stepper steps={steps} currentStep={currentStep} />
+          <div className="mb-8 overflow-x-auto">
+            <Stepper steps={steps} currentStep={currentStep} onStepClick={goToStep} />
           </div>
-          <BusinessInfo />
+          {renderStep()}
         </div>
         <div className="text-center mt-4 text-xs text-gray-500">
           <p>QCLPO.BPLD.BPO.FR</p>

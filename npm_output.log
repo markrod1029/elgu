@@ -1,9 +1,12 @@
 
 > frontend@0.0.0 dev
 > vite
+<<<<<<< HEAD
 
 
   VITE v7.1.9  ready in 581 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: use --host to expose
+=======
+>>>>>>> 3a44072c2eecf565e7a6de133990d0e998b1701e
