@@ -1,24 +1,104 @@
 import { forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  variant?: 'default' | 'rounded' | 'underline' | 'icon';
+  icon?: React.ReactNode;
+  iconPosition?: 'left' | 'right';
+}
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+  (
+    {
+      className,
+      type = 'text',
+      variant = 'default',
+      icon,
+      iconPosition = 'right',
+      ...props
+    },
+    ref
+  ) => {
+    // 🎨 Base styles
+    const baseStyles =
+      'flex w-full bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50';
+
+    // ✨ Variants
+    const variants = {
+      default:
+        'h-10 rounded-md border border-input focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+      rounded:
+        'h-12 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition',
+      underline:
+        'border-0 border-b border-gray-400 focus:border-blue-500 focus:ring-0 rounded-none px-0',
+      icon:
+        'h-12 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition pl-4 pr-10',
+    };
+
     return (
-      <input
-        type={type}
-        className={cn(
-          'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-          className
+      <div className={cn('relative w-full', variant === 'icon' ? 'flex items-center' : '')}>
+        {icon && variant === 'icon' && iconPosition === 'left' && (
+          <div className="absolute left-3 text-gray-400 pointer-events-none">{icon}</div>
         )}
-        ref={ref}
-        {...props}
-      />
+
+        <input
+          ref={ref}
+          type={type}
+          className={cn(
+            baseStyles,
+            variants[variant],
+            variant === 'icon' && iconPosition === 'left' ? 'pl-9' : '',
+            variant === 'icon' && iconPosition === 'right' ? 'pr-9' : '',
+            className
+          )}
+          {...props}
+        />
+
+        {icon && variant === 'icon' && iconPosition === 'right' && (
+          <div className="absolute right-3 text-gray-400 pointer-events-none">{icon}</div>
+        )}
+      </div>
     );
   }
 );
-Input.displayName = 'Input';
 
+Input.displayName = 'Input';
 export { Input };
+
+
+// {/* Default Input */ }
+// <Input
+//   type="email"
+//   placeholder="Default Input"
+//   value={email}
+//   onChange={(e) => setEmail(e.target.value)}
+// />
+
+// {/* Rounded Input */ }
+// <Input
+//   type="email"
+//   placeholder="Rounded Input"
+//   variant="rounded"
+//   value={email}
+//   onChange={(e) => setEmail(e.target.value)}
+// />
+
+// {/* Underline Input */ }
+// <Input
+//   type="email"
+//   placeholder="Underline Input"
+//   variant="underline"
+//   value={email}
+//   onChange={(e) => setEmail(e.target.value)}
+// />
+
+// {/* Icon Input */ }
+// <Input
+//   type="email"
+//   placeholder="Email"
+//   variant="icon"
+//   icon={<Mail size={18} />}
+//   iconPosition="right"
+//   value={email}
+//   onChange={(e) => setEmail(e.target.value)}
+// />
