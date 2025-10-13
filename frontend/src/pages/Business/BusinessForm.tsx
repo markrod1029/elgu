@@ -24,33 +24,33 @@ const BusinessForm: React.FC = () => {
     'Other Required Information',
     'Summary Page',
   ].map((label, index) => {
-      const stepNumber = index + 1;
-      let status: 'complete' | 'current' | 'incomplete' = 'incomplete';
-      if (stepNumber < currentStep) {
-          status = 'complete';
-      } else if (stepNumber === currentStep) {
-          status = 'current';
-      }
-      return { label, status };
+    const stepNumber = index + 1;
+    let status: 'complete' | 'current' | 'incomplete' = 'incomplete';
+    if (stepNumber < currentStep) {
+      status = 'complete';
+    } else if (stepNumber === currentStep) {
+      status = 'current';
+    }
+    return { label, status };
   });
 
   const renderStep = () => {
     const props = { nextStep, prevStep, currentStep, totalSteps };
     switch (currentStep) {
       case 1:
-        return <Complete {...props} />;
-      case 2:
         return <BasicRequirements {...props} />;
-      case 3:
+      case 2:
         return <BusinessInfo {...props} />;
-      case 4:
+      case 3:
         return <BusinessOperation {...props} />;
-      case 5:
+      case 4:
         return <BusinessActivity {...props} />;
-      case 6:
+      case 5:
         return <OtherInfo {...props} />;
-      case 7:
+      case 6:
         return <Summary prevStep={prevStep} currentStep={currentStep} totalSteps={totalSteps} />;
+      case 7:
+        return <Complete {...props} />;
       default:
         return <BusinessInfo {...props} />;
     }
