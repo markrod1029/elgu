@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-
+import { Button } from '@/components/atoms/button';
+import { Input } from '@/components/atoms/Input';
+import { FcGoogle } from "react-icons/fc";
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+      <div className="w-full max-w-md p-8 space-y-8 ">
+      {/* <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md"> */}
         <div className="flex flex-col items-center">
-          <img src="/src/assets/images/elgu_png.png" alt="Logo" className="h-20 mb-4" />
+          <img src="/assets/logo.png" alt="Logo" className="h-40 mb-4" />
           <h1 className="text-2xl font-bold">Welcome back!</h1>
         </div>
         <form className="space-y-6">
@@ -47,7 +48,7 @@ const LoginPage = () => {
           <div className="w-full border-t border-gray-300"></div>
         </div>
         <Button variant="outline" className="w-full">
-          Mag-sign in sa Google
+          <FcGoogle size={20} /> Mag-sign in sa Google
         </Button>
         <div className="text-center">
           <p>
