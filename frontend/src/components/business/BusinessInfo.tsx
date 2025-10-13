@@ -69,8 +69,57 @@ const BusinessInfo: React.FC<BusinessInfoProps> = ({ nextStep, prevStep, current
         </div>
 
         {/* Main Office Address */}
-        {/* ... similar updates for address fields ... */}
+        <div>
+          <h3 className="text-lg font-bold mb-4 border-b pb-2">Main Office Address</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <LabeledInput label="House/Bldg. No" id="houseBldgNo" value={formData.houseBldgNo} onChange={handleChange} className="md:col-span-1" />
+            <LabeledInput label="Name of Building" id="buildingName" value={formData.buildingName} onChange={handleChange} className="md:col-span-3" />
+            <LabeledInput label="Block No." id="blockNo" value={formData.blockNo} onChange={handleChange} />
+            <LabeledInput label="Lot No." id="lotNo" value={formData.lotNo} onChange={handleChange} />
+            <LabeledInput label="Street" id="street" value={formData.street} onChange={handleChange} className="md:col-span-2" />
+            <LabeledInput label="Subdivision" id="subdivision" value={formData.subdivision} onChange={handleChange} className="md:col-span-4" />
+            <LabeledInput label="Province" id="province" value={formData.province} onChange={handleChange} />
+            <LabeledInput label="City/Municipality" id="city" value={formData.city} onChange={handleChange} />
+            <LabeledInput label="Barangay" id="barangay" value={formData.barangay} onChange={handleChange} />
+            <LabeledInput label="Zip Code" id="zipCode" value={formData.zipCode} onChange={handleChange} />
+            <LabeledInput label="District" id="district" value={formData.district} onChange={handleChange} className="md:col-span-2" />
+          </div>
+        </div>
 
+        {/* Contact Information */}
+        <div>
+          <h3 className="text-lg font-bold mb-4 border-b pb-2">Contact Information</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <LabeledInput label="Telephone No." id="telNo" value={formData.telNo} onChange={handleChange} />
+            <LabeledInput label="Email Address:" id="email" value={formData.email} onChange={handleChange} />
+            <LabeledInput label="Mobile No." id="mobileNo" value={formData.mobileNo} onChange={handleChange} />
+          </div>
+        </div>
+
+        {/* Owner's Information */}
+        <div>
+          <h3 className="text-lg font-bold mb-4 border-b pb-2">Owner's Information</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <LabeledInput label="Last Name" id="lastName" value={formData.lastName} onChange={handleChange} />
+            <LabeledInput label="Given Name" id="givenName" value={formData.givenName} onChange={handleChange} />
+            <LabeledInput label="Middle Name" id="middleName" value={formData.middleName} onChange={handleChange} />
+            <LabeledInput label="Suffix" id="suffix" value={formData.suffix} onChange={handleChange} />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Sex:</label>
+              <RadioGroup
+                name="sex"
+                options={[{ label: 'Male', value: 'male' }, { label: 'Female', value: 'female' }]}
+                selectedValue={formData.sex}
+                onChange={(value) => updateField('sex', value)}
+              />
+            </div>
+            <LabeledInput label="For Corporation:" id="forCorporation" value={formData.forCorporation} onChange={handleChange} />
+            <LabeledInput label="% Filipino" id="filipino" value={formData.filipino} onChange={handleChange} />
+            <LabeledInput label="% Foreign" id="foreign" value={formData.foreign} onChange={handleChange} />
+          </div>
+        </div>
       </div>
 
       {/* Navigation Buttons */}

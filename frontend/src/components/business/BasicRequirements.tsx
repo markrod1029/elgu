@@ -21,8 +21,8 @@ const requirements = [
 const BasicRequirements: React.FC<BasicRequirementsProps> = ({ nextStep, prevStep, currentStep, totalSteps }) => {
   const { formData, updateField } = useForm();
 
-  const handleCheckboxChange = (id: string, checked: boolean) => {
-    updateField(id, checked);
+  const handleCheckboxChange = (id: string, checked: boolean | 'indeterminate') => {
+    updateField(id, checked === true);
   };
 
   return (
@@ -36,7 +36,7 @@ const BasicRequirements: React.FC<BasicRequirementsProps> = ({ nextStep, prevSte
             <Checkbox
               id={req.id}
               checked={!!formData[req.id]}
-              onCheckedChange={(checked) => handleCheckboxChange(req.id, !!checked)}
+              onCheckedChange={(checked) => handleCheckboxChange(req.id, checked)}
             />
             <label htmlFor={req.id} className="ml-2 text-sm">{req.label}</label>
           </div>

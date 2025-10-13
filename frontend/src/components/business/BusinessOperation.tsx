@@ -31,8 +31,8 @@ const BusinessOperation: React.FC<BusinessOperationProps> = ({ nextStep, prevSte
 
       <div className="space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <LabeledInput label="Business Area (in sq. m.)" id="businessArea" value={formData.businessArea || ''} onChange={handleChange} />
-          <LabeledInput label="No. of Employees" id="numEmployees" value={formData.numEmployees || ''} onChange={handleChange} />
+          <LabeledInput label="Business Area (in sq. m.)" id="businessArea" value={formData.businessArea} onChange={handleChange} />
+          <LabeledInput label="No. of Employees" id="numEmployees" value={formData.numEmployees} onChange={handleChange} />
         </div>
         <div>
           <h3 className="text-lg font-bold mb-4 border-b pb-2">Business Address</h3>
@@ -40,7 +40,19 @@ const BusinessOperation: React.FC<BusinessOperationProps> = ({ nextStep, prevSte
             <Checkbox id="opSameAsMain" checked={!!formData.opSameAsMain} onCheckedChange={(checked) => updateField('opSameAsMain', !!checked)} />
             <label htmlFor="opSameAsMain" className="ml-2 text-sm">Same as Main Office Address</label>
           </div>
-          {/* ... address fields ... */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <LabeledInput label="House/Bldg. No" id="opHouseBldgNo" value={formData.opHouseBldgNo} onChange={handleChange} className="md:col-span-1" />
+            <LabeledInput label="Name of Building" id="opBuildingName" value={formData.opBuildingName} onChange={handleChange} className="md:col-span-3" />
+            <LabeledInput label="Block No." id="opBlockNo" value={formData.opBlockNo} onChange={handleChange} />
+            <LabeledInput label="Lot No." id="opLotNo" value={formData.opLotNo} onChange={handleChange} />
+            <LabeledInput label="Street" id="opStreet" value={formData.opStreet} onChange={handleChange} className="md:col-span-2" />
+            <LabeledInput label="Subdivision" id="opSubdivision" value={formData.opSubdivision} onChange={handleChange} className="md:col-span-4" />
+            <LabeledInput label="Province" id="opProvince" value={formData.opProvince} onChange={handleChange} />
+            <LabeledInput label="City/Municipality" id="opCity" value={formData.opCity} onChange={handleChange} />
+            <LabeledInput label="Barangay" id="opBarangay" value={formData.opBarangay} onChange={handleChange} />
+            <LabeledInput label="Zip Code" id="opZipCode" value={formData.opZipCode} onChange={handleChange} />
+            <LabeledInput label="District" id="opDistrict" value={formData.opDistrict} onChange={handleChange} className="md:col-span-2" />
+          </div>
         </div>
       </div>
 
