@@ -8,7 +8,7 @@ import { Mail, Eye, EyeClosed } from 'lucide-react';
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md p-8 space-y-8 ">
@@ -41,11 +41,17 @@ const LoginPage = () => {
 
           <div>
 
+            {/* Password */}
             <Input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               placeholder="Password"
               variant="icon"
-              icon={<Eye size={18} />}
+              icon={
+                <button type="button" onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <EyeClosed size={18} /> : <Eye size={18} />}
+                </button>
+              }
+
               iconPosition="right"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
