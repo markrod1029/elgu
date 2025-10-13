@@ -8,6 +8,11 @@ import { Mail, Eye, EyeClosed } from 'lucide-react';
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // Add this state
+
+    const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -39,22 +44,20 @@ const LoginPage = () => {
           </div>
 
 
-          <div>
-
+         <div>
             <Input
-              type="password"
+              type={showPassword ? "text" : "password"} // Toggle input type
               placeholder="Password"
               variant="icon"
-              icon={<Eye size={18} />}
+              icon={showPassword ? <EyeClosed size={18} /> : <Eye size={18} />} // Toggle icon
               iconPosition="right"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onIconClick={togglePasswordVisibility} // Add click handler
             />
-
-
           </div>
           <div className="text-right">
-            <Link to="#" className="text-sm text-blue-600 hover:underline">
+            <Link to="/verify" className="text-sm text-blue-600 hover:underline">
               Forgot password?
             </Link>
           </div>
@@ -77,12 +80,12 @@ const LoginPage = () => {
             </Link>
           </p>
         </div>
-        <div className="text-center">
+        {/* <div className="text-center">
           <Link to="/verify">
             <Button variant="ghost">VERIFY</Button>
 
           </Link>
-        </div>
+        </div> */}
       </div>
       <div className="absolute bottom-0 w-full">
         <img

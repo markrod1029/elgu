@@ -5,6 +5,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   variant?: 'default' | 'rounded' | 'underline' | 'icon';
   icon?: React.ReactNode;
   iconPosition?: 'left' | 'right';
+  onIconClick?: () => void; // Add this for click handling
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -15,6 +16,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       variant = 'default',
       icon,
       iconPosition = 'right',
+      onIconClick, // Add this prop
       ...props
     },
     ref
@@ -38,7 +40,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={cn('relative w-full', variant === 'icon' ? 'flex items-center' : '')}>
         {icon && variant === 'icon' && iconPosition === 'left' && (
-          <div className="absolute left-3 text-gray-400 pointer-events-none">{icon}</div>
+          <div 
+            className={cn(
+              "absolute left-3 text-gray-400", 
+              onIconClick && "cursor-pointer" // Only show pointer if clickable
+            )}
+            onClick={onIconClick}
+          >
+            {icon}
+          </div>
         )}
 
         <input
@@ -55,7 +65,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         />
 
         {icon && variant === 'icon' && iconPosition === 'right' && (
-          <div className="absolute right-3 text-gray-400 pointer-events-none">{icon}</div>
+          <div 
+            className={cn(
+              "absolute right-3 text-gray-400", 
+              onIconClick && "cursor-pointer" // Only show pointer if clickable
+            )}
+            onClick={onIconClick}
+          >
+            {icon}
+          </div>
         )}
       </div>
     );
