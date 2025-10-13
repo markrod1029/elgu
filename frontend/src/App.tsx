@@ -1,11 +1,29 @@
-import './App.css'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import VerifyPage from './pages/VerifyPage';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <LoginPage />,
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />,
+  },
+  {
+    path: '/verify',
+    element: <VerifyPage />,
+  },
+]);
 
 function App() {
-
-  return (
-        <div className="bg-blue-500 text-white p-4">
-            Tailwind is working!
-        </div>
-  )
+  return <RouterProvider router={router} />;
 }
-export default App
+
+export default App;
