@@ -100,8 +100,8 @@ const Header = () => {
                 <Link to="/" className="hover:text-red-600">HOME</Link>
                 <Link to="/government" className="hover:text-red-600">BUSINESS LISTS</Link>
                 <Link to="/city-programs" className="hover:text-red-600">BUSINESS REGISTER</Link>
-                <Link to="/qc-e-services" className="hover:text-red-600">MAPS</Link>
-                <Link to="/public-notices" className="hover:text-red-600">SATELLITE IMAGES</Link>
+                <Link to="/maps" className="hover:text-red-600">MAPS</Link>
+                <Link to="/satelite-map" className="hover:text-red-600">SATELLITE IMAGES</Link>
                 <Link to="/media" className="hover:text-red-600">GENERATE REPORT</Link>
               </nav>
             </div>

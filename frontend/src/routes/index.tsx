@@ -5,6 +5,8 @@ import VerifyPage from '@/pages/Auth/VerifyPage';
 import DashboardPage from '@/pages/Dashboard/DashboardPage';
 import WeatherPages from '@/pages/Dashboard/WeatherPages';
 import PlaceholderPage from '@/pages/PlaceholderPage';
+import GISmain from '@/pages/Dashboard/Maps/GISMain';
+import Maps from '@/pages/Dashboard/Maps/Maps';
 import MainLayout from '@/layout/main';
 
 export const router = createBrowserRouter([
@@ -47,69 +49,23 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: '/mayors-desk',
+    path: '/satelite-map',
     element: (
       <MainLayout>
-        <PlaceholderPage />
+        <GISmain />
       </MainLayout>
     ),
   },
-  {
-    path: '/government',
+ 
+    {
+    path: '/Maps',
     element: (
       <MainLayout>
-        <PlaceholderPage />
+        <Maps />
       </MainLayout>
     ),
   },
-  {
-    path: '/city-programs',
-    element: (
-      <MainLayout>
-        <PlaceholderPage />
-      </MainLayout>
-    ),
-  },
-  {
-    path: '/qc-e-services',
-    element: (
-      <MainLayout>
-        <PlaceholderPage />
-      </MainLayout>
-    ),
-  },
-  {
-    path: '/public-notices',
-    element: (
-      <MainLayout>
-        <PlaceholderPage />
-      </MainLayout>
-    ),
-  },
-  {
-    path: '/media',
-    element: (
-      <MainLayout>
-        <PlaceholderPage />
-      </MainLayout>
-    ),
-  },
-  {
-    path: '/peoples-corner',
-    element: (
-      <MainLayout>
-        <PlaceholderPage />
-      </MainLayout>
-    ),
-  },
-  {
-    path: '/qc-gov-faqs',
-    element: (
-      <MainLayout>
-        <PlaceholderPage />
-      </MainLayout>
-    ),
-  },
+
   {
     path: '/calendar',
     element: (
@@ -126,20 +82,5 @@ export const router = createBrowserRouter([
       </MainLayout>
     ),
   },
-  {
-    path: '/careers',
-    element: (
-      <MainLayout>
-        <PlaceholderPage />
-      </MainLayout>
-    ),
-  },
-  {
-    path: '/about-qc',
-    element: (
-      <MainLayout>
-        <PlaceholderPage />
-      </MainLayout>
-    ),
-  },
+
 ]);
