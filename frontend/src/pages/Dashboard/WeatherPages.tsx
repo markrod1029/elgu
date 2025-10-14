@@ -1,39 +1,33 @@
-// src/components/organisms/DashboardSummary/DashboardSummary.tsx
-import { useState, useEffect } from 'react'
-import { WeatherCard } from '@/components/molecules/WeatherCard'
-import { NewsCard } from '@/components/molecules/newsCard'
-import { SystemInfoCard } from '@/components/molecules/systemInfoCard'
-import { LoadingSpinner } from '@/components/molecules/loadingSpinner'
-import { Typography } from '@/components/atoms/typography'
+import { useState, useEffect } from 'react';
 
 interface WeatherData {
-    city: string
-    temperature: string
-    description: string
-    fullDescription?: string
+    city: string;
+    temperature: string;
+    description: string;
+    fullDescription?: string;
 }
 
 interface NewsItem {
-    title: string
-    link: string
+    title: string;
+    link: string;
 }
 
 const DashboardSummary = () => {
-    const [weather, setWeather] = useState<WeatherData | null>(null)
-    const [weatherGreeting, setWeatherGreeting] = useState<string>('')
-    const [news, setNews] = useState<NewsItem[]>([])
-    const [greeting, setGreeting] = useState<string>('')
-    const [timestamp, setTimestamp] = useState<string>('')
-    const [loading, setLoading] = useState(true)
-    const [systemInfo, setSystemInfo] = useState<string[]>([])
+    const [weather, setWeather] = useState<WeatherData | null>(null);
+    const [weatherGreeting, setWeatherGreeting] = useState<string>('');
+    const [news, setNews] = useState<NewsItem[]>([]);
+    const [greeting, setGreeting] = useState<string>('');
+    const [timestamp, setTimestamp] = useState<string>('');
+    const [loading, setLoading] = useState(true);
+    const [systemInfo, setSystemInfo] = useState<string[]>([]);
 
     useEffect(() => {
         const generateSummary = async () => {
-            setLoading(true)
+            setLoading(true);
 
             try {
-                // Set timestamp
-                const now = new Date()
+                // Set timestamp (matches your VB.NET format)
+                const now = new Date();
                 const formattedTimestamp = now.toLocaleDateString('en-US', {
                     weekday: 'long',
                     year: 'numeric',
@@ -43,55 +37,57 @@ const DashboardSummary = () => {
                     hour: '2-digit',
                     minute: '2-digit',
                     hour12: true
-                }).toLowerCase()
+                }).toLowerCase();
 
-                setTimestamp(formattedTimestamp)
+                setTimestamp(formattedTimestamp);
 
-                // Sample system data
-                const dataSummary = "3 businesses have expiring DTI permits. 2 branches have unverified documents."
+                // Sample system data (from your VB.NET)
+                const dataSummary = "3 businesses have expiring DTI permits. 2 branches have unverified documents.";
 
-                // Process system info list
+                // Process system info list (matches your VB.NET logic)
                 const dataList = dataSummary
                     .split(/\r\n|\n|\./)
                     .map(s => s.trim())
-                    .filter(s => s.length > 0)
+                    .filter(s => s.length > 0);
 
-                setSystemInfo(dataList)
+                setSystemInfo(dataList);
 
                 // Get basic greeting first
-                const aiGreeting = await getOpenAIResponse("Generate a friendly greeting only (no summary), such as 'Good Morning! Here's your daily update.'")
-                setGreeting(aiGreeting)
+                const aiGreeting = await getOpenAIResponse("Generate a friendly greeting only (no summary), such as 'Good Morning! Here's your daily update.'");
+                setGreeting(aiGreeting);
 
                 // Fetch weather data
-                const weatherData = await getWeatherSummary("Leganes,PH")
-                setWeather(weatherData)
+                const weatherData = await getWeatherSummary("Leganes,PH");
+                setWeather(weatherData);
 
                 // Generate weather greeting after we have weather data
                 if (weatherData) {
-                    const weatherGreetingText = await generateWeatherGreeting(weatherData)
-                    setWeatherGreeting(weatherGreetingText)
+                    const weatherGreetingText = await generateWeatherGreeting(weatherData);
+                    setWeatherGreeting(weatherGreetingText);
                 }
 
                 // Fetch news
-                const newsData = await getCityNewsSummary("Leganes Iloilo")
-                setNews(newsData)
+                const newsData = await getCityNewsSummary("Leganes Iloilo");
+                setNews(newsData);
 
             } catch (error) {
-                console.error('Error generating summary:', error)
-                const fallbackGreeting = getFallbackGreeting()
-                setGreeting(fallbackGreeting)
+                console.error('Error generating summary:', error);
+                // Fallback greeting based on time of day
+                const hour = new Date().getHours();
+                const fallbackGreeting = getFallbackGreeting();
+                setGreeting(fallbackGreeting);
 
                 if (weather) {
-                    const fallbackWeatherGreeting = generateFallbackWeatherGreeting(weather)
-                    setWeatherGreeting(fallbackWeatherGreeting)
+                    const fallbackWeatherGreeting = generateFallbackWeatherGreeting(weather);
+                    setWeatherGreeting(fallbackWeatherGreeting);
                 }
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
-        }
+        };
 
-        generateSummary()
-    }, [])
+        generateSummary();
+    }, []);
 
     const getWeatherSummary = async (location: string): Promise<WeatherData> => {
         const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
@@ -136,6 +132,7 @@ const DashboardSummary = () => {
     };
 
     const generateWeatherGreeting = async (weatherData: WeatherData): Promise<string> => {
+        // If no temperature data, return simple message
         if (weatherData.temperature === 'N/A') {
             return "Weather information is currently unavailable. Please check back later.";
         }
@@ -201,6 +198,7 @@ Generate the greeting now:`;
         }
     };
 
+    // Helper function to convert weather description to adjectives
     const weatherDescriptionToAdjective = (description: string): string => {
         const descriptionLower = description.toLowerCase();
 
@@ -439,7 +437,14 @@ Return ONLY a valid JSON array in this exact format:
     };
 
     if (loading) {
-        return <LoadingSpinner size="full" text="Loading dashboard summary..." />
+        return (
+            <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                    <p className="mt-4 text-gray-600">Loading dashboard summary...</p>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -447,47 +452,98 @@ Return ONLY a valid JSON array in this exact format:
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="mb-6">
-                    <Typography variant="h1" as="h1">
-                        {greeting}
-                    </Typography>
-                    <Typography variant="muted" className="mt-2">
-                        {timestamp}
-                    </Typography>
+                    <h1 className="text-3xl font-bold text-gray-900">{greeting}</h1>
+                    <p className="text-gray-600 mt-2">{timestamp}</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Weather Card */}
-                    <WeatherCard
-                        weather={weather}
-                        greeting={weatherGreeting}
-                        layout="vertical"
-                    />
+                    {/* Weather Card - Updated with weather greeting */}
+                    <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                        <div className="flex items-center mb-4">
+                            <span className="text-2xl mr-3">☁️</span>
+                            <h2 className="text-xl font-semibold text-gray-800">Weather Update</h2>
+                        </div>
+                        {weather ? (
+                            <div className="space-y-3">
+                                <div className="space-y-2">
+                                    <p className="text-lg text-gray-700 font-semibold">{weather.city}</p>
+
+                                    <p className="text-3xl font-bold text-gray-900">{weather.temperature}</p>
+                                    {/* <p className="text-blue-800 font-medium">{weatherGreeting}</p> */}
+                                    {/* <p className="text-gray-600 capitalize">{weather.description}</p> */}
+                                    <p className="text-gray-600 capitalize">{weatherGreeting}</p>
+                                </div>
+                            </div>
+                        ) : (
+                            <p className="text-gray-500">Loading weather data...</p>
+                        )}
+                    </div>
 
                     {/* System Information Card */}
-                    <SystemInfoCard
-                        systemInfo={systemInfo}
-                        title="System Information"
-                    />
+                    <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                        <div className="flex items-center mb-4">
+                            <span className="text-2xl mr-3">📋</span>
+                            <h2 className="text-xl font-semibold text-gray-800">System Information</h2>
+                        </div>
+                        {systemInfo.length > 0 ? (
+                            <ul className="space-y-3">
+                                {systemInfo.map((info, index) => (
+                                    <li key={index} className="flex items-start">
+                                        <span className="text-blue-500 mr-2 mt-1">•</span>
+                                        <span className="text-gray-700">{info}.</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-gray-500">No system information available</p>
+                        )}
+                    </div>
 
                     {/* Local News Card - Full Width */}
-                    <div className="lg:col-span-2">
-                        <NewsCard
-                            news={news}
-                            title="Local News"
-                            onRetry={handleRetryNews}
-                        />
+                    <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                        <div className="flex items-center mb-4">
+                            <span className="text-2xl mr-3">📰</span>
+                            <h2 className="text-xl font-semibold text-gray-800">Local News</h2>
+                        </div>
+                        {news.length > 0 ? (
+                            <ul className="space-y-3">
+                                {news.map((item, index) => (
+                                    <li key={index} className="flex items-start">
+                                        <span className="text-blue-500 mr-2 mt-1">•</span>
+                                        <a
+                                            href={item.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-600 hover:text-blue-800 hover:underline font-medium transition-colors break-words"
+                                        >
+                                            {item.title}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <div className="text-center py-8">
+                                <p className="text-gray-500 mb-4">No news available at the moment</p>
+                                <button
+                                    onClick={handleRetryNews}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                >
+                                    Retry Loading News
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 {/* Footer */}
                 <div className="mt-8 text-center">
-                    <Typography variant="muted">
+                    <p className="text-gray-600">
                         If you need any more information or assistance, feel free to ask.
-                    </Typography>
+                    </p>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default DashboardSummary
+export default DashboardSummary;
