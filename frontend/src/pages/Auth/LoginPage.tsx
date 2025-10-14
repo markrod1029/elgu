@@ -69,7 +69,7 @@ const LoginPage = () => {
           <span className="absolute px-3 bg-[#F9FAFB] ">OR</span>
           <div className="w-full border-t border-gray-300"></div>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full hover:bg-red-600 hover:border-red-600">
           <FcGoogle size={20} /> Mag-sign in sa Google
         </Button>
         <div className="text-center">
@@ -87,9 +87,9 @@ const LoginPage = () => {
           </Link>
         </div> */}
       </div>
-      <div className="absolute bottom-0 w-full">
+     <div className="absolute bottom-0 w-full mt-5">
         <img
-          src="/src/assets/images/cityhall10-desktop.png"
+          src="/assets/cityhall-desktop.png"
           alt="Footer illustration"
           className="w-full"
         />
