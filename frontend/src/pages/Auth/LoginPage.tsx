@@ -24,13 +24,7 @@ const LoginPage = () => {
         </div>
         <form className="space-y-6">
           <div>
-            {/* <Input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-2 border rounded-md"
-            /> */}
+            
 
             <Input
               type="email"
