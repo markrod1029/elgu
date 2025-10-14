@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Menu, Search, Cloud, Wind, Sun } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Menu,  Cloud, Wind, Sun } from "lucide-react";
+// import { Menu, Search, Cloud, Wind, Sun } from "lucide-react";
+// import { Input } from "@/components/ui/input";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
