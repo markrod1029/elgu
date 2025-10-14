@@ -89,11 +89,11 @@ const RegisterPage = () => {
         </div>
       </div>
       <div className="absolute bottom-0 w-full">
-        <img
-          src="/src/assets/images/cityhall10-desktop.png"
+        {/* <img
+          src="/assets/cityhall-desktop.png"
           alt="Footer illustration"
           className="w-full"
-        />
+        /> */}
       </div>
     </div>
   );
