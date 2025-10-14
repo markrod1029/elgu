@@ -3,10 +3,7 @@ import LoginPage from '@/pages/Auth/LoginPage';
 import RegisterPage from '@/pages/Auth/RegisterPage';
 import VerifyPage from '@/pages/Auth/VerifyPage';
 import DashboardPage from '@/pages/Dashboard/DashboardPage';
-<<<<<<< HEAD
-=======
 import WeatherPages from '@/pages/Dashboard/WeatherPages';
->>>>>>> weather
 import PlaceholderPage from '@/pages/PlaceholderPage';
 import MainLayout from '@/layout/main';
 
@@ -19,8 +16,6 @@ export const router = createBrowserRouter([
       </MainLayout>
     ),
   },
-<<<<<<< HEAD
-=======
 
    {
     path: '/dashboard-summary',
@@ -31,7 +26,6 @@ export const router = createBrowserRouter([
     ),
   },
 
->>>>>>> weather
   {
     path: '/login',
     element: <LoginPage />,

@@ -1,22 +1,11 @@
-<<<<<<< HEAD
-=======
 import TotalBusinessChart from '@/components/molecules/charts/pieChart';
 import MonthlyBusinessComparisonChart from '@/components/molecules/charts/lineChart';
 import BusinessStatusChart from '@/components/molecules/charts/stackBarChart';
 import MunicipalityChart from '@/components/molecules/charts/horizontalBarChart';
->>>>>>> weather
 
 const DashboardPage = () => {
   return (
     <div>
-<<<<<<< HEAD
-      <h1 className="text-2xl font-bold mb-6 text-center">LGU Provinces Chart</h1>
-      
-      <div className="text-center mt-6">
-        <a href="#" className="text-blue-500 hover:underline">
-          More Guides
-        </a>
-=======
       <h1 className="text-2xl font-bold mb-6 text-center">Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -35,7 +24,6 @@ const DashboardPage = () => {
           <h2 className="text-xl font-semibold mb-2">Businesses by Municipality</h2>
           <MunicipalityChart />
         </div>
->>>>>>> weather
       </div>
     </div>
   );

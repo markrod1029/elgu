@@ -41,26 +41,12 @@ const Header = () => {
             >
               <nav className="flex flex-col space-y-2 text-base font-medium text-gray-700">
                 <Link to="/" className="hover:text-red-600">HOME</Link>
-<<<<<<< HEAD
-                <Link to="/mayors-desk" className="hover:text-red-600">MAYOR'S DESK</Link>
-                <Link to="/government" className="hover:text-red-600">GOVERNMENT</Link>
-                <Link to="/city-programs" className="hover:text-red-600">CITY PROGRAMS</Link>
-                <Link to="/qc-e-services" className="hover:text-red-600">QC E-SERVICES</Link>
-                <Link to="/public-notices" className="hover:text-red-600">PUBLIC NOTICES</Link>
-                <Link to="/media" className="hover:text-red-600">MEDIA</Link>
-                <Link to="/peoples-corner" className="hover:text-red-600">PEOPLE'S CORNER</Link>
-                <Link to="/qc-gov-faqs" className="hover:text-red-600">QC GOV FAQS</Link>
-                <Link to="/calendar" className="hover:text-red-600">CALENDAR</Link>
-                <Link to="/places-to-visit" className="hover:text-red-600">PLACES TO VISIT</Link>
-                <Link to="/careers" className="hover:text-red-600">CAREERS</Link>
-=======
                 <Link to="/dashboard-summary" className="hover:text-red-600">SUMMARY</Link>
                 <Link to="/government" className="hover:text-red-600">BUSINESS LISTS</Link>
                 <Link to="/city-programs" className="hover:text-red-600">BUSINESS REGISTER</Link>
                 <Link to="/qc-e-services" className="hover:text-red-600">MAPS</Link>
                 <Link to="/public-notices" className="hover:text-red-600">SATELLITE IMAGES</Link>
                 <Link to="/media" className="hover:text-red-600">GENERATE REPORT</Link>
->>>>>>> weather
               </nav>
             </div>
           )}
