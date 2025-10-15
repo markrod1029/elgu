@@ -1,4 +1,4 @@
-export async function fetchOpenAIResponse(prompt: string, maxTokens = 100): Promise<string> {
+export async function fetchOpenAIResponse(prompt: string, maxTokens = 50): Promise<string> {
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
   if (!apiKey) return 'Missing API key.';

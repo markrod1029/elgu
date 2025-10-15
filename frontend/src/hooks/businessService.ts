@@ -5,7 +5,7 @@ import type {
 //   BusinessAddress, 
 //   BusinessRepresentative, 
 //   BusinessRequirements 
-} from '@/types/business';
+} from '@/types/index';
 
 // Shorter dummy data
 const dummyBusinesses: Business[] = [

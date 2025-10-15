@@ -1,4 +1,3 @@
-// src/components/dashboard/DashboardSummary.tsx
 import { Typography } from '@/components/atoms/typography';
 import { useDashboardSummary } from '@/hooks/useDashboardSummary';
 

@@ -1,4 +1,13 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
 
 const data = [
   { name: 'Registered', Active: 400, Inactive: 240 },
@@ -7,18 +16,29 @@ const data = [
 
 const BusinessStatusChart = () => {
   return (
-    <div style={{ width: '100%', height: 300 }}>
+    <div style={{ width: '100%', height: 350 }}>
       <ResponsiveContainer>
-        <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
+        <BarChart
+          data={data}
+          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
+          <XAxis dataKey="name" tick={{ fontSize: 14, fill: '#374151' }} />
+          <YAxis tick={{ fontSize: 14, fill: '#374151' }} />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: '#fff',
+              border: '1px solid #E5E7EB',
+              borderRadius: '8px',
+            }}
+          />
           <Legend />
-          <Bar dataKey="Active" stackId="a" fill="#8884d8" />
-          <Bar dataKey="Inactive" stackId="a" fill="#82ca9d" />
-          <Bar dataKey="Verified" stackId="b" fill="#ffc658" />
-          <Bar dataKey="Unverified" stackId="b" fill="#d0ed57" />
+          {/* Grouped bars for Registered */}
+          <Bar dataKey="Active" fill="#4F46E5" radius={[6, 6, 0, 0]} />
+          <Bar dataKey="Inactive" fill="#60A5FA" radius={[6, 6, 0, 0]} />
+          {/* Grouped bars for Verified */}
+          <Bar dataKey="Verified" fill="#F59E0B" radius={[6, 6, 0, 0]} />
+          <Bar dataKey="Unverified" fill="#FBBF24" radius={[6, 6, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
