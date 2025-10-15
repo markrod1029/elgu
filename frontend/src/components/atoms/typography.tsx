@@ -1,4 +1,3 @@
-// src/components/atoms/Typography/Typography.tsx
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
@@ -13,6 +12,7 @@ const typographyVariants = cva("text-foreground", {
       p: "leading-7",
       lead: "text-xl text-muted-foreground",
       large: "text-lg font-semibold",
+      medium: "text-md font-medium",
       small: "text-sm font-medium leading-none",
       muted: "text-sm text-muted-foreground",
     },

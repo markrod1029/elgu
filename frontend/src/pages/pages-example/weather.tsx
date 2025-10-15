@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Typography } from '@/components/atoms/typography';
 
 interface WeatherData {
     city: string;
@@ -73,7 +74,7 @@ const DashboardSummary = () => {
             } catch (error) {
                 console.error('Error generating summary:', error);
                 // Fallback greeting based on time of day
-                const hour = new Date().getHours();
+                // const hour = new Date().getHours();
                 const fallbackGreeting = getFallbackGreeting();
                 setGreeting(fallbackGreeting);
 
@@ -440,8 +441,13 @@ Return ONLY a valid JSON array in this exact format:
         return (
             <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
                 <div className="text-center">
+                    
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Loading dashboard summary...</p>
+                     
+                     <Typography as="p"  className="mt-4 text-gray-600">
+                        Loading dashboard summary...
+                    </Typography>
+                    
                 </div>
             </div>
         );
@@ -452,64 +458,101 @@ Return ONLY a valid JSON array in this exact format:
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="mb-6">
-                    <h1 className="text-3xl font-bold text-gray-900">{greeting}</h1>
-                    <p className="text-gray-600 mt-2">{timestamp}</p>
+                    <Typography variant="h2" weight="bold" className="text-gray-900">
+                        {greeting}
+                    </Typography>
+                    <Typography as="p" className="text-gray-600 mt-2">
+                        {timestamp}
+                    </Typography>
+
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Weather Card - Updated with weather greeting */}
                     <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
                         <div className="flex items-center mb-4">
-                            <span className="text-2xl mr-3">☁️</span>
-                            <h2 className="text-xl font-semibold text-gray-800">Weather Update</h2>
+                            <Typography as="span" variant="h3" className="text-gray-700">
+                                ☁️
+                            </Typography>
+
+                            <Typography as="h2" variant="h4" weight='bold' className="text-gray-800">
+                                Weather Update
+                            </Typography>
+
                         </div>
                         {weather ? (
                             <div className="space-y-3">
                                 <div className="space-y-2">
-                                    <p className="text-lg text-gray-700 font-semibold">{weather.city}</p>
+                                    <Typography as="p" variant="large" weight="semibold" className="text-gray-700">
+                                        {weather.city}
+                                    </Typography>
 
-                                    <p className="text-3xl font-bold text-gray-900">{weather.temperature}</p>
+                                    <Typography as="p" variant="h2" weight="bold" className="text-gray-900">
+                                        {weather.temperature}
+                                    </Typography>
+
                                     {/* <p className="text-blue-800 font-medium">{weatherGreeting}</p> */}
                                     {/* <p className="text-gray-600 capitalize">{weather.description}</p> */}
-                                    <p className="text-gray-600 capitalize">{weatherGreeting}</p>
+
+                                    <Typography as="p" className="text-gray-600 capitalize">
+                                        {weatherGreeting}
+                                    </Typography>
                                 </div>
                             </div>
                         ) : (
-                            <p className="text-gray-500">Loading weather data...</p>
+                            <Typography as="p" className="text-gray-500">
+                                SLoading weather data...
+                            </Typography>
                         )}
                     </div>
 
                     {/* System Information Card */}
                     <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
                         <div className="flex items-center mb-4">
-                            <span className="text-2xl mr-3">📋</span>
-                            <h2 className="text-xl font-semibold text-gray-800">System Information</h2>
+                            <Typography as="span" variant="lead" className="mr-3">
+                                📋
+                            </Typography>
+                            <Typography as="h2" variant="lead" weight="semibold" className="text-gray-800">
+                                System Information
+                            </Typography>
+
                         </div>
                         {systemInfo.length > 0 ? (
                             <ul className="space-y-3">
                                 {systemInfo.map((info, index) => (
                                     <li key={index} className="flex items-start">
-                                        <span className="text-blue-500 mr-2 mt-1">•</span>
-                                        <span className="text-gray-700">{info}.</span>
+                                        <Typography as="span" className="text-blue-500 mr-2 mt-1">
+                                            No system information available
+                                        </Typography>
+
+                                        <Typography as="span" className="text-gray-700">
+                                            {info}.
+                                        </Typography>
                                     </li>
                                 ))}
                             </ul>
                         ) : (
-                            <p className="text-gray-500">No system information available</p>
+                            <Typography as="p" className="text-gray-500">
+                                No system information available
+                            </Typography>
                         )}
                     </div>
 
                     {/* Local News Card - Full Width */}
                     <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6 border border-gray-200">
                         <div className="flex items-center mb-4">
-                            <span className="text-2xl mr-3">📰</span>
-                            <h2 className="text-xl font-semibold text-gray-800">Local News</h2>
+                            <Typography as="span">
+                                📰
+                            </Typography>
+                            <Typography as="h2" variant="lead" weight="medium" className="text-gray-800-4">
+                                Local News
+                            </Typography>
                         </div>
                         {news.length > 0 ? (
                             <ul className="space-y-3">
                                 {news.map((item, index) => (
                                     <li key={index} className="flex items-start">
-                                        <span className="text-blue-500 mr-2 mt-1">•</span>
+                                        <Typography as="span" className='text-blue-500 mr-2 mt-1'>•</Typography>
                                         <a
                                             href={item.link}
                                             target="_blank"
@@ -523,7 +566,9 @@ Return ONLY a valid JSON array in this exact format:
                             </ul>
                         ) : (
                             <div className="text-center py-8">
-                                <p className="text-gray-500 mb-4">No news available at the moment</p>
+                                <Typography as="p" className="text-gray-500 mb-4">
+                                    No news available at the moment
+                                </Typography>
                                 <button
                                     onClick={handleRetryNews}
                                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -537,9 +582,11 @@ Return ONLY a valid JSON array in this exact format:
 
                 {/* Footer */}
                 <div className="mt-8 text-center">
-                    <p className="text-gray-600">
+
+                    <Typography as="p" className="text-gray-600">
                         If you need any more information or assistance, feel free to ask.
-                    </p>
+                    </Typography>
+
                 </div>
             </div>
         </div>

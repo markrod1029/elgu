@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "./header";
 // import Sidebar from "./sidebar";
-import Footer from "./footer";
+// import Footer from "./footer";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -15,7 +15,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         {/* <Sidebar /> */}
         <main className="flex-1 p-4 md:p-6">{children}</main>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

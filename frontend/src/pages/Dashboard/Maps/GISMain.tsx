@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, MapPin, Search } from 'lucide-react';
 import GISDetails from './GISDetails';
-import { useGoogleMapsLoader } from '@/hooks/useGoogleMapsLoader';
+import { useGoogleMapsLoader } from '@/services/useGoogleMapsLoader';
 
 const GISMain: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);

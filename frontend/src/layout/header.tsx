@@ -1,15 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/atoms/button";
 import { Link } from "react-router-dom";
-import { Menu, Cloud, Wind, Sun, CloudRain, CloudDrizzle, Moon } from "lucide-react";
+import { Menu, Cloud, Wind, Sun, CloudRain, CloudDrizzle, Moon, Loader2 } from "lucide-react";
+import { fetchWeather } from "@/services/api/weatherService";
+import type { WeatherData } from '@/types';
+
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const [weatherData, setWeatherData] = useState({
-    temperature: 28,
-    condition: "Partly Cloudy",
-    humidity: 65,
-    windSpeed: 12
-  });
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [weatherLoading, setWeatherLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
@@ -25,9 +24,46 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Fetch real weather data
+  useEffect(() => {
+    const getWeatherData = async () => {
+      try {
+        setWeatherLoading(true);
+        const data = await fetchWeather("Leganes,PH");
+        setWeatherData(data);
+      } catch (error) {
+        console.error('Failed to fetch weather data:', error);
+        // Set fallback data if API fails
+        setWeatherData({
+          city: "Leganes",
+          temperature: "N/A",
+          description: "Weather unavailable",
+          fullDescription: "Unable to fetch weather data"
+        });
+      } finally {
+        setWeatherLoading(false);
+      }
+    };
+
+    getWeatherData();
+    
+    // Refresh weather data every 30 minutes
+    const interval = setInterval(getWeatherData, 30 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   // Get appropriate weather icon based on condition
   const getWeatherIcon = () => {
-    const condition = weatherData.condition.toLowerCase();
+    if (weatherLoading) {
+      return <Loader2 className="h-5 w-5 text-gray-500 animate-spin" />;
+    }
+
+    if (!weatherData || weatherData.temperature === 'N/A') {
+      return <Cloud className="h-5 w-5 text-gray-500" />;
+    }
+
+    const condition = weatherData.description.toLowerCase();
 
     if (condition.includes("rain") || condition.includes("shower")) {
       return <CloudRain className="h-5 w-5 text-blue-500" />;
@@ -37,12 +73,41 @@ const Header = () => {
       return <Cloud className="h-5 w-5 text-gray-500" />;
     } else if (condition.includes("wind") || condition.includes("breeze")) {
       return <Wind className="h-5 w-5 text-gray-600" />;
+    } else if (condition.includes("clear") || condition.includes("sunny")) {
+      return <Sun className="h-5 w-5 text-yellow-500" />;
     } else {
       return <Sun className="h-5 w-5 text-yellow-500" />;
     }
   };
 
-    // Toggle dark mode
+  // Get weather display values
+  const getWeatherDisplay = () => {
+    if (weatherLoading) {
+      return {
+        temperature: "Loading...",
+        condition: "Loading weather...",
+        windSpeed: "--"
+      };
+    }
+
+    if (!weatherData || weatherData.temperature === 'N/A') {
+      return {
+        temperature: "N/A",
+        condition: "Unavailable",
+        windSpeed: "--"
+      };
+    }
+
+    return {
+      temperature: weatherData.temperature,
+      condition: weatherData.description,
+      windSpeed: "12" // You can add wind speed to your WeatherData type if needed
+    };
+  };
+
+  const weatherDisplay = getWeatherDisplay();
+
+  // Toggle dark mode
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -51,38 +116,13 @@ const Header = () => {
     }
   }, [darkMode]);
 
-  
-  // Simulate weather data fetch
-  useEffect(() => {
-
-    
-    // In a real app, you would fetch this from your weather API
-    const fetchWeather = () => {
-      // This is mock data - replace with actual API call
-      const conditions = ["Sunny", "Partly Cloudy", "Cloudy", "Light Rain", "Windy"];
-      const randomCondition = conditions[Math.floor(Math.random() * conditions.length)];
-
-      setWeatherData({
-        temperature: Math.floor(Math.random() * 10) + 25, // 25-35°C
-        condition: randomCondition,
-        humidity: Math.floor(Math.random() * 30) + 50, // 50-80%
-        windSpeed: Math.floor(Math.random() * 15) + 5 // 5-20 km/h
-      });
-    };
-
-    fetchWeather();
-    // Update weather every 30 minutes
-    const interval = setInterval(fetchWeather, 30 * 60 * 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <header className="flex h-20 items-center justify-between px-4 md:px-6 bg-white border-b-2 relative">
       <div className="flex items-center gap-4" ref={menuRef}>
         {/* MENU BUTTON */}
         <div className="relative">
-          <Button
+          <Button 
+            variant="destructive"
             className="bg-red-600 text-white hover:bg-red-700"
             onClick={() => setOpen(!open)}
           >
@@ -118,53 +158,51 @@ const Header = () => {
       {/* RIGHT SECTION */}
       <div className="flex items-center gap-4">
         {/* WEATHER DISPLAY */}
-
-        <Link to="/dashboard-summary" >
-
-
-          <div className="flex items-center gap-3 bg-gradient-to-r from-blue-50 to-blue-100 px-4 py-2 rounded-lg border border-blue-200">
+        <Link to="/dashboard-summary">
+          {/* Desktop Weather Display */}
+          <div className="hidden sm:flex items-center gap-3 bg-gradient-to-r from-blue-50 to-blue-100 px-4 py-2 rounded-lg border border-blue-200">
             {/* Weather Icon and Temperature */}
             <div className="flex items-center gap-2">
               {getWeatherIcon()}
               <span className="text-lg font-bold text-gray-800">
-                {weatherData.temperature}°C
+                {weatherDisplay.temperature}
               </span>
             </div>
 
             {/* Weather Details */}
-            <div className="hidden sm:flex flex-col text-xs text-gray-600 border-l border-blue-200 pl-3">
+            <div className="flex flex-col text-xs text-gray-600 border-l border-blue-200 pl-3">
               <div className="flex items-center gap-1">
                 <Cloud className="h-3 w-3" />
-                <span>{weatherData.condition}</span>
+                <span className="capitalize">{weatherDisplay.condition}</span>
               </div>
-              <div className="flex items-center gap-1">
-                <Wind className="h-3 w-3" />
-                <span>{weatherData.windSpeed} km/h</span>
-              </div>
+              {weatherData?.city && (
+                <div className="text-xs text-gray-500">
+                  {weatherData.city}
+                </div>
+              )}
             </div>
           </div>
 
-
-          {/* SIMPLIFIED WEATHER FOR MOBILE */}
+          {/* Mobile Weather Display */}
           <div className="flex sm:hidden items-center gap-2 bg-blue-50 px-3 py-2 rounded-lg border border-blue-200">
             {getWeatherIcon()}
             <span className="text-sm font-semibold text-gray-800">
-              {weatherData.temperature}°C
+              {weatherDisplay.temperature}
             </span>
           </div>
-
         </Link>
-
 
         {/* DARK/LIGHT TOGGLE */}
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className={`relative w-14 h-8 rounded-full transition-colors duration-300 flex items-center ${darkMode ? "bg-gray-700" : "bg-gray-300"
-            }`}
+          className={`relative w-14 h-8 rounded-full transition-colors duration-300 flex items-center ${
+            darkMode ? "bg-gray-700" : "bg-gray-300"
+          }`}
         >
           <span
-            className={`absolute left-1 top-1 w-6 h-6 rounded-full bg-white flex items-center justify-center transition-all duration-300 ${darkMode ? "translate-x-6" : "translate-x-0"
-              }`}
+            className={`absolute left-1 top-1 w-6 h-6 rounded-full bg-white flex items-center justify-center transition-all duration-300 ${
+              darkMode ? "translate-x-6" : "translate-x-0"
+            }`}
           >
             {darkMode ? (
               <Moon className="h-4 w-4 text-gray-800" />
@@ -184,7 +222,7 @@ const Header = () => {
           /> */}
         </div>
       </div>
-    </header >
+    </header>
   );
 };
 

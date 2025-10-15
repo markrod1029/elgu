@@ -10,7 +10,7 @@ import {
   Type,
   Map
 } from 'lucide-react';
-import { useGoogleMapsLoader } from '@/hooks/useGoogleMapsLoader';
+import { useGoogleMapsLoader } from '@/services/useGoogleMapsLoader';
 
 
 interface GISDetailsProps {

@@ -55,7 +55,7 @@ const LoginPage = () => {
               Forgot password?
             </Link>
           </div>
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full rounded-full">
             Login
           </Button>
         </form>
@@ -63,7 +63,7 @@ const LoginPage = () => {
           <span className="absolute px-3 bg-[#F9FAFB] ">OR</span>
           <div className="w-full border-t border-gray-300"></div>
         </div>
-        <Button variant="outline" className="w-full hover:bg-red-600 hover:border-red-600">
+        <Button variant="outline" className="rounded-full w-full hover:bg-red-600 hover:border-red-600">
           <FcGoogle size={20} /> Mag-sign in sa Google
         </Button>
         <div className="text-center">

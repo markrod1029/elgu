@@ -5,7 +5,10 @@ export const useGoogleMapsLoader = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (window.google && window.google.maps) {
+    // Use type assertion to fix window.google errors
+    const win = window as any;
+    
+    if (win.google && win.google.maps) {
       setIsLoaded(true);
       return;
     }
@@ -20,7 +23,7 @@ export const useGoogleMapsLoader = () => {
     const existingScript = document.querySelector(`script[src*="maps.googleapis.com/maps/api/js"]`);
     if (existingScript) {
       const checkLoaded = setInterval(() => {
-        if (window.google && window.google.maps) {
+        if (win.google && win.google.maps) {
           setIsLoaded(true);
           clearInterval(checkLoaded);
         }
@@ -35,7 +38,7 @@ export const useGoogleMapsLoader = () => {
 
     script.onload = () => {
       setTimeout(() => {
-        if (window.google && window.google.maps) {
+        if (win.google && win.google.maps) {
           setIsLoaded(true);
         } else {
           setError('Google Maps loaded but not properly initialized');
@@ -47,14 +50,14 @@ export const useGoogleMapsLoader = () => {
       setError('Failed to load Google Maps API');
     };
 
-    window.gm_authFailure = () => {
+    win.gm_authFailure = () => {
       setError('Google Maps API authentication failed');
     };
 
     document.head.appendChild(script);
 
     return () => {
-      window.gm_authFailure = () => { };
+      win.gm_authFailure = () => { };
     };
   }, []);
 
