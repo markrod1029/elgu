@@ -4,7 +4,7 @@ import RegisterPage from '@/pages/Auth/RegisterPage';
 import VerifyPage from '@/pages/Auth/VerifyPage';
 import DashboardPage from '@/pages/Dashboard/Summary/DashboardPage';
 import BusinessLists from '@/pages/Dashboard/Business/BusinessList';
-import BusinessForm from '@/pages/Dashboard/Business/BusinessForm';
+import BusinessForm from '@/pages/Dashboard/Business/businessForm';
 import WeatherPages from '@/pages/Dashboard/Summary/WeatherPages';
 import Error from '@/pages/Error';
 import GISmain from '@/pages/Dashboard/Maps/GISMain';
@@ -66,7 +66,7 @@ export const router = createBrowserRouter([
   },
 
     {
-    path: '/business-lists',
+    path: '/business-form',
 
     element: (
       <MainLayout>
