@@ -8,7 +8,12 @@ import { Mail, Eye, EyeClosed } from 'lucide-react';
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Add this state
+
+    const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md p-8 space-y-8 ">
@@ -19,13 +24,7 @@ const LoginPage = () => {
         </div>
         <form className="space-y-6">
           <div>
-            {/* <Input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-2 border rounded-md"
-            /> */}
+            
 
             <Input
               type="email"
@@ -39,32 +38,24 @@ const LoginPage = () => {
           </div>
 
 
-          <div>
-
-            {/* Password */}
+         <div>
             <Input
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"} // Toggle input type
               placeholder="Password"
               variant="icon"
-              icon={
-                <button type="button" onClick={() => setShowPassword(!showPassword)}>
-                  {showPassword ? <EyeClosed size={18} /> : <Eye size={18} />}
-                </button>
-              }
-
+              icon={showPassword ? <EyeClosed size={18} /> : <Eye size={18} />} // Toggle icon
               iconPosition="right"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onIconClick={togglePasswordVisibility} // Add click handler
             />
-
-
           </div>
           <div className="text-right">
-            <Link to="#" className="text-sm text-blue-600 hover:underline">
+            <Link to="/verify" className="text-sm text-blue-600 hover:underline">
               Forgot password?
             </Link>
           </div>
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full rounded-full">
             Login
           </Button>
         </form>
@@ -72,7 +63,7 @@ const LoginPage = () => {
           <span className="absolute px-3 bg-[#F9FAFB] ">OR</span>
           <div className="w-full border-t border-gray-300"></div>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="rounded-full w-full hover:bg-red-600 hover:border-red-600">
           <FcGoogle size={20} /> Mag-sign in sa Google
         </Button>
         <div className="text-center">
@@ -83,16 +74,16 @@ const LoginPage = () => {
             </Link>
           </p>
         </div>
-        <div className="text-center">
+        {/* <div className="text-center">
           <Link to="/verify">
             <Button variant="ghost">VERIFY</Button>
 
           </Link>
-        </div>
+        </div> */}
       </div>
-      <div className="absolute bottom-0 w-full">
+     <div className="absolute bottom-0 w-full mt-5">
         <img
-          src="/src/assets/images/cityhall10-desktop.png"
+          src="/assets/cityhall-desktop.png"
           alt="Footer illustration"
           className="w-full"
         />
