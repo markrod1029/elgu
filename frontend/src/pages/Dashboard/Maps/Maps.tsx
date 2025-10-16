@@ -2,11 +2,12 @@ import React, { useEffect, useState, useRef } from 'react';
 import { MapPin, Filter } from 'lucide-react';
 import { Typography } from '@/components/atoms/typography';
 import { BusinessService } from '@/hooks/businessService';
-import type { Business, BusinessDetails } from '@/types/business';
-import type { MapMarker } from '@/types/map';
+import type { Business, BusinessDetails } from '@/types';
+import type { MapMarker } from '@/utils/map';
 import { useGoogleMapsLoader } from '@/services/useGoogleMapsLoader';
 import { flagIcons } from '@/utils/mapConstants';
 import { BusinessDetailsPanel } from '@/components/organisms/BusinessDetailsPanel';
+import { Card } from '@/components/atoms/card';
 
 interface MapsProps {
   complianceFilter?: string;
@@ -228,54 +229,75 @@ const Maps: React.FC<MapsProps> = ({ complianceFilter = '' }) => {
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Header */}
-    <header className="bg-white shadow-sm border-b border-gray-200">
-  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 py-4 gap-3">
-    {/* Title */}
-    <Typography as="h1" variant="lead" className="text-gray-800 flex items-center gap-2">
-      <MapPin size={24} className="text-blue-600" />
-      Leganes Business Maps
-    </Typography>
 
-    {/* Right Section: Filter + Count */}
-    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-      {/* Compliance Filter */}
-      <div className="flex items-center gap-2">
-        <Filter size={16} className="text-gray-600" />
-        <select
-          className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onChange={(e) => loadFilteredBusinesses(e.target.value)}
-          value={complianceFilter}
-        >
-          <option value="">All Businesses</option>
-          <option value="compliant">Compliant</option>
-          <option value="noncompliant">Non-Compliant</option>
-          <option value="pending">Pending</option>
-        </select>
-      </div>
-
-      {/* Active Filter Label */}
-      {complianceFilter && (
-        <Typography
-          as="span"
-          variant="small"
-          className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full"
-        >
-          Filter: {complianceFilter}
-        </Typography>
-      )}
-
-      {/* Business Count */}
-      <div className="bg-white border border-gray-200 rounded-lg px-3 py-1 shadow-sm">
-        <Typography as="div" variant="small" weight="medium" className="text-gray-800">
-          Total Businesses:{" "}
-          <Typography as="span" weight="bold">
-            {businesses.length}
+      {/* 🔹 Header */}
+      <Card variant="default" padding="lg" className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0 mb-5">
+        <div>
+          <Typography variant="h1" as="h1" weight="bold" className="text-2xl text-gray-900 mb-1">
+            Leganes Business Map
           </Typography>
-        </Typography>
-      </div>
-    </div>
-  </div>
-</header>
+          <Typography variant="p" className="text-gray-600">
+            View the geographical distribution of registered businesses in Leganes and monitor their compliance status in real time.
+          </Typography>
+
+
+        </div>
+        <div className="flex items-center space-x-3">
+          {/* Download Dropdown */}
+
+
+        </div>
+      </Card>
+
+
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 py-4 gap-3">
+          {/* Title */}
+          <Typography as="h1" variant="lead" className="text-gray-800 flex items-center gap-2">
+            <MapPin size={24} className="text-blue-600" />
+            Leganes Business Maps
+          </Typography>
+
+          {/* Right Section: Filter + Count */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            {/* Compliance Filter */}
+            <div className="flex items-center gap-2">
+              <Filter size={16} className="text-gray-600" />
+              <select
+                className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={(e) => loadFilteredBusinesses(e.target.value)}
+                value={complianceFilter}
+              >
+                <option value="">All Businesses</option>
+                <option value="compliant">Compliant</option>
+                <option value="noncompliant">Non-Compliant</option>
+                <option value="pending">Pending</option>
+              </select>
+            </div>
+
+            {/* Active Filter Label */}
+            {complianceFilter && (
+              <Typography
+                as="span"
+                variant="small"
+                className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full"
+              >
+                Filter: {complianceFilter}
+              </Typography>
+            )}
+
+            {/* Business Count */}
+            <div className="bg-white border border-gray-200 rounded-lg px-3 py-1 shadow-sm">
+              <Typography as="div" variant="small" weight="medium" className="text-gray-800">
+                Total Businesses:{" "}
+                <Typography as="span" weight="bold">
+                  {businesses.length}
+                </Typography>
+              </Typography>
+            </div>
+          </div>
+        </div>
+      </header>
 
 
       {/* Main Content */}
@@ -332,9 +354,9 @@ const Maps: React.FC<MapsProps> = ({ complianceFilter = '' }) => {
 
         {/* Business Details Panel */}
         {showDetails && selectedBusiness && (
-          <BusinessDetailsPanel 
-            selectedBusiness={selectedBusiness} 
-            onClose={() => setShowDetails(false)} 
+          <BusinessDetailsPanel
+            selectedBusiness={selectedBusiness}
+            onClose={() => setShowDetails(false)}
           />
         )}
       </div>
@@ -362,7 +384,7 @@ const Maps: React.FC<MapsProps> = ({ complianceFilter = '' }) => {
 
 
     </div>
-          
+
   );
 };
 

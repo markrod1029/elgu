@@ -17,6 +17,7 @@ const statCardVariants = cva("", {
             yellow: "text-yellow-600",
             red: "text-red-600",
             purple: "text-purple-600",
+            orange : "text-orange-600"
         }
     },
     defaultVariants: {
@@ -30,7 +31,7 @@ export interface StatCardProps
     VariantProps<typeof statCardVariants> {
     title: string
     value: string | number
-    color?: "blue" | "green" | "yellow" | "red" | "purple"
+    color?: "blue" | "green" | "yellow" | "red" | "purple" | "orange"
     icon: React.ComponentType<{ className?: string }>
     description?: string
     trend?: {
@@ -47,6 +48,7 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
             yellow: "bg-yellow-100",
             red: "bg-red-100",
             purple: "bg-purple-100",
+            orange : "bg-orange-100"
         }[color || "blue"]
 
         const trendColorClass = trend?.isPositive ? "text-green-600" : "text-red-600"

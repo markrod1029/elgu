@@ -9,6 +9,7 @@ import { StatsSummary } from '@/components/molecules/card/statsSummary';
 import { Building, CheckCircle, Clock, XCircle, MapPin } from 'lucide-react';
 import { Typography } from '@/components/atoms/typography';
 import type { DashboardStats } from '@/types';
+import { Card } from '@/components/atoms/card';
 
 
 const DashboardPage = () => {
@@ -85,9 +86,23 @@ const DashboardPage = () => {
 
   return (
     <div className="p-6">
-      <Typography as="h1" variant="h1" className="mb-8 text-gray-800 text-center">
-        Business Dashboard
-      </Typography>
+      {/* 🔹 Header */}
+      <Card variant="default" padding="lg" className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0 mb-5">
+        <div>
+          <Typography variant="h1" as="h1" weight="bold" className="text-2xl text-gray-900 mb-1">
+            Business Overview Dashboard
+          </Typography>
+          <Typography variant="p" className="text-gray-600">
+            Get a comprehensive view of all registered businesses, compliance rates, and performance trends across municipalities.
+          </Typography>
+
+        </div>
+        <div className="flex items-center space-x-3">
+          {/* Download Dropdown */}
+
+
+        </div>
+      </Card>
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">

@@ -3,6 +3,8 @@ import LoginPage from '@/pages/Auth/LoginPage';
 import RegisterPage from '@/pages/Auth/RegisterPage';
 import VerifyPage from '@/pages/Auth/VerifyPage';
 import DashboardPage from '@/pages/Dashboard/Summary/DashboardPage';
+import BusinessLists from '@/pages/Dashboard/Business/BusinessList';
+import BusinessForm from '@/pages/Dashboard/Business/BusinessForm';
 import WeatherPages from '@/pages/Dashboard/Summary/WeatherPages';
 import Error from '@/pages/Error';
 import GISmain from '@/pages/Dashboard/Maps/GISMain';
@@ -19,7 +21,7 @@ export const router = createBrowserRouter([
     ),
   },
 
-   {
+  {
     path: '/dashboard-summary',
     element: (
       <MainLayout>
@@ -40,6 +42,9 @@ export const router = createBrowserRouter([
     path: '/verify',
     element: <VerifyPage />,
   },
+
+
+
   {
     path: '/dashboard',
     element: (
@@ -48,6 +53,30 @@ export const router = createBrowserRouter([
       </MainLayout>
     ),
   },
+
+  {
+    path: '/business-lists',
+
+    element: (
+      <MainLayout>
+        <BusinessLists />
+      </MainLayout>
+    )
+
+  },
+
+    {
+    path: '/business-lists',
+
+    element: (
+      <MainLayout>
+        <BusinessForm />
+      </MainLayout>
+    )
+
+  },
+
+
   {
     path: '/satelite-map',
     element: (
@@ -56,8 +85,8 @@ export const router = createBrowserRouter([
       </MainLayout>
     ),
   },
- 
-    {
+
+  {
     path: '/Maps',
     element: (
       <MainLayout>

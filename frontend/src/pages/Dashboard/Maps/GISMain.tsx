@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { X, MapPin, Search } from 'lucide-react';
 import GISDetails from './GISDetails';
 import { useGoogleMapsLoader } from '@/services/useGoogleMapsLoader';
+import { Card } from '@/components/atoms/card';
+import { Typography } from '@/components/atoms/typography';
 
 const GISMain: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -11,7 +13,7 @@ const GISMain: React.FC = () => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [marker, setMarker] = useState<google.maps.Marker | null>(null);
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
-  
+
   const { isLoaded, error } = useGoogleMapsLoader();
 
   useEffect(() => {
@@ -42,7 +44,7 @@ const GISMain: React.FC = () => {
               lng: position.coords.longitude
             };
             googleMap.setCenter(userLocation);
-            
+
             const userMarker = new google.maps.Marker({
               position: userLocation,
               map: googleMap,
@@ -129,6 +131,24 @@ const GISMain: React.FC = () => {
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Header */}
+      <Card variant="default" padding="lg" className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0 mb-5">
+        <div>
+          <Typography variant="h1" as="h1" weight="bold" className="text-2xl text-gray-900 mb-1">
+            Leganes Business Map
+          </Typography>
+          <Typography variant="p" className="text-gray-600">
+            View the geographical distribution of registered businesses in Leganes and monitor their compliance status in real time.
+          </Typography>
+
+
+        </div>
+        <div className="flex items-center space-x-3">
+          {/* Download Dropdown */}
+
+
+        </div>
+      </Card>
+
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="flex items-center justify-between px-6 py-4">
           <h1 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
