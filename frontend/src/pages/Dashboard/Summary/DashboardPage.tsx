@@ -3,17 +3,13 @@ import TotalBusinessChart from '@/components/molecules/charts/pieChart';
 import MonthlyBusinessComparisonChart from '@/components/molecules/charts/lineChart';
 import BusinessStatusChart from '@/components/molecules/charts/stackBarChart';
 import MunicipalityChart from '@/components/molecules/charts/horizontalBarChart';
-import { Building, CheckCircle, Clock, XCircle, MapPin, TrendingUp, TrendingDown } from 'lucide-react';
+import { StatCard } from '@/components/molecules/card/statCard';
+import { ChartContainer } from '@/components/molecules/card/container';
+import { StatsSummary } from '@/components/molecules/card/statsSummary';
+import { Building, CheckCircle, Clock, XCircle, MapPin } from 'lucide-react';
 import { Typography } from '@/components/atoms/typography';
+import type { DashboardStats } from '@/types';
 
-interface DashboardStats {
-  totalBusinesses: number;
-  compliantBusinesses: number;
-  pendingBusinesses: number;
-  nonCompliantBusinesses: number;
-  municipalities: number;
-  growthRate: number;
-}
 
 const DashboardPage = () => {
   const [stats, setStats] = useState<DashboardStats>({
@@ -64,232 +60,112 @@ const DashboardPage = () => {
   const complianceRate = (stats.compliantBusinesses / stats.totalBusinesses) * 100;
   const nonComplianceRate = (stats.nonCompliantBusinesses / stats.totalBusinesses) * 100;
 
+  const summaryStats = [
+    {
+      label: "Total Registered",
+      value: stats.totalBusinesses,
+      color: "blue" as const
+    },
+    {
+      label: "Compliance Rate",
+      value: `${complianceRate.toFixed(0)}%`,
+      color: "green" as const
+    },
+    {
+      label: "Need Attention",
+      value: stats.pendingBusinesses,
+      color: "yellow" as const
+    },
+    {
+      label: "Non-Compliant",
+      value: `${nonComplianceRate.toFixed(0)}%`,
+      color: "red" as const
+    }
+  ];
+
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-8 text-gray-800 text-center">Business Dashboard</h1>
+      <Typography as="h1" variant="h1" className="mb-8 text-gray-800 text-center">
+        Business Dashboard
+      </Typography>
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-        {/* Total Businesses Card */}
-        <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
+        <StatCard
+          title="Total Businesses"
+          value={stats.totalBusinesses}
+          icon={Building}
+          color="blue"
+          trend={{
+            value: stats.growthRate,
+            isPositive: stats.growthRate >= 0
+          }}
+        />
 
-              <Typography as="p" variant="small" weight="medium" className="text-gray-600 mb-2">
-                Total Businesses
-              </Typography>
-              <Typography as="p" variant="h2" weight="bold" className="text-blue-800">
-                {stats.totalBusinesses}
-              </Typography>
+        <StatCard
+          title="Compliant"
+          value={stats.compliantBusinesses}
+          icon={CheckCircle}
+          color="green"
+          description={`${complianceRate.toFixed(1)}% of total`}
+        />
 
-            </div>
-            <div className="p-3 bg-blue-100 rounded-full">
-              <Building className="w-6 h-6 text-blue-600" />
-            </div>
-          </div>
-          <div className="mt-4 flex items-center text-sm">
-            {stats.growthRate >= 0 ? (
-              <TrendingUp className="w-4 h-4 mr-1 text-green-600" />
-            ) : (
-              <TrendingDown className="w-4 h-4 mr-1 text-red-600" />
-            )}
-            <Typography as="span" className={stats.growthRate >= 0 ? 'text-green-600' : 'text-red-600'}>
-              {stats.growthRate >= 0 ? '+' : ''}{stats.growthRate}% from last month
-            </Typography>
+        <StatCard
+          title="Pending"
+          value={stats.pendingBusinesses}
+          icon={Clock}
+          color="yellow"
+          description={`${((stats.pendingBusinesses / stats.totalBusinesses) * 100).toFixed(1)}% of total`}
+        />
 
-          </div>
-        </div>
+        <StatCard
+          title="Non-Compliant"
+          value={stats.nonCompliantBusinesses}
+          icon={XCircle}
+          color="red"
+          description={`${nonComplianceRate.toFixed(1)}% of total`}
+        />
 
-        {/* Compliant Businesses Card */}
-        <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <Typography as="p" variant="small" weight="medium" className="text-gray-600 mb-2">
-                Compliant
-              </Typography>
-              <Typography as="p" variant="h2" weight="bold" className="text-green-600">
-                {stats.compliantBusinesses}
-              </Typography>
-
-            </div>
-            <div className="p-3 bg-green-100 rounded-full">
-              <CheckCircle className="w-6 h-6 text-green-600" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <Typography as="p" variant="small" lassName="text-gray-600">
-              {complianceRate.toFixed(1)}% of total
-            </Typography>
-          </div>
-        </div>
-
-        {/* Pending Businesses Card */}
-        <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <Typography as="p" variant="small" weight="medium" className="text-gray-600 mb-2">
-                Pending
-              </Typography>
-              <Typography as="p" variant="h2" weight="bold" className="text-yellow-600">
-                {stats.pendingBusinesses}
-              </Typography>
-            </div>
-            <div className="p-3 bg-yellow-100 rounded-full">
-              <Clock className="w-6 h-6 text-yellow-600" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <Typography as="p" variant="small" lassName="text-gray-600">
-              {((stats.pendingBusinesses / stats.totalBusinesses) * 100).toFixed(1)}% of total
-            </Typography>
-          </div>
-        </div>
-
-        {/* Non-Compliant Businesses Card */}
-        <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <Typography as="p" variant="small" weight="medium" className="text-gray-600 mb-2">
-                Non-Compliant
-              </Typography>
-              <Typography as="p" variant="h2" weight="bold" className="text-red-600">
-                {stats.nonCompliantBusinesses}
-              </Typography>
-
-            </div>
-            <div className="p-3 bg-red-100 rounded-full">
-              <XCircle className="w-6 h-6 text-red-600" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <Typography as="p" variant="small" lassName="text-gray-600">
-              {nonComplianceRate.toFixed(1)}% of total
-            </Typography>
-          </div>
-        </div>
-
-        {/* Municipalities Card */}
-        <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <Typography as="p" variant="small" weight="medium" className="text-gray-600 mb-2">
-                Municipalities
-              </Typography>
-              <Typography as="p" variant="h2" weight="bold" className="text-purple-600">
-                {stats.municipalities}
-              </Typography>
-
-            </div>
-            <div className="p-3 bg-purple-100 rounded-full">
-              <MapPin className="w-6 h-6 text-purple-600" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <Typography as="p" variant="small" lassName="text-gray-600">
-              Coverage area
-            </Typography>
-          </div>
-        </div>
+        <StatCard
+          title="Municipalities"
+          value={stats.municipalities}
+          icon={MapPin}
+          color="purple"
+          description="Coverage area"
+        />
       </div>
 
-      {/* Charts Section - Single Column Layout */}
+      {/* Charts Section */}
       <div className="space-y-8">
-        {/* Row 1: Total Business Distribution and Business Compliance Status (2 columns on large screens) */}
+        {/* Row 1: Two columns on large screens */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Total Business Distribution - 50% width */}
-          <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
-            <Typography as="h2" variant="h4" weight="semibold" className="mb-4 text-gray-800">
-              Total Business Distribution
-            </Typography>
-            <div className="w-full h-80">
-              <TotalBusinessChart />
-            </div>
-          </div>
+          <ChartContainer title="Total Business Distribution">
+            <TotalBusinessChart />
+          </ChartContainer>
 
-          {/* Business Compliance Status - 50% width */}
-          <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
-            <Typography as="h2" variant="h4" weight="semibold" className="mb-4 text-gray-800">
-              Business Compliance Status
-            </Typography>
-            <div className="w-full h-80">
-              <BusinessStatusChart />
-            </div>
-          </div>
+          <ChartContainer title="Business Compliance Status">
+            <BusinessStatusChart />
+          </ChartContainer>
         </div>
 
-        {/* Row 2: Monthly Business Trends and Businesses by Municipality (1 column on large screens) */}
+        {/* Row 2: Single column */}
         <div className="space-y-8">
-          {/* Monthly Business Trends - 100% width */}
-          <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
-            <Typography as="h2" variant="h4" weight="semibold" className="mb-4 text-gray-800">
-              Monthly Business Trends
-            </Typography>
-            <div className="w-full h-80">
-              <MonthlyBusinessComparisonChart />
-            </div>
-          </div>
+          <ChartContainer title="Monthly Business Trends">
+            <MonthlyBusinessComparisonChart />
+          </ChartContainer>
 
-          {/* Businesses by Municipality - 100% width */}
-          <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
-            <Typography as="h2" variant="h4" weight="semibold" className="mb-4 text-gray-800">
-              Businesses by Municipality
-            </Typography>
-            <div className="w-full h-80">
-              <MunicipalityChart />
-            </div>
-          </div>
+          <ChartContainer title="Businesses by Municipality">
+            <MunicipalityChart />
+          </ChartContainer>
         </div>
       </div>
 
       {/* Quick Stats Summary */}
-      <div className="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-lg border border-gray-200 p-6">
-        <Typography as="h2" variant="large" weight="semibold" className="mb-4 text-gray-800">
-          Performance Summary
-        </Typography>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-          <div className="text-center">
-            <Typography as="div" variant="h3" weight="bold" className="text-blue-600">
-              {stats.totalBusinesses}
-            </Typography>
-
-            <Typography as="div" className="text-gray-600">
-              Total Registered
-            </Typography>
-
-          </div>
-          <div className="text-center">
-            <Typography as="div" variant="h3" weight="bold" className="text-green-600">
-              {complianceRate.toFixed(0)}%
-            </Typography>
-
-            <Typography as="div" className="text-gray-600">
-              Compliance Rate
-            </Typography>
-
-          </div>
-          <div className="text-center">
-
-            <Typography as="div" variant="h3" weight="bold" className="text-yellow-600">
-              {stats.pendingBusinesses}
-            </Typography>
-
-            <Typography as="div" className="text-gray-600">
-              Need Attention
-            </Typography>
-
-          </div>
-          <div className="text-center">
-            <Typography as="div" variant="h3" weight="bold" className="text-red-600">
-              {nonComplianceRate.toFixed(0)}%
-            </Typography>
-
-            <Typography as="div" className="text-gray-600">
-              Non-Compliant
-            </Typography>
-          </div>
-        </div>
-      </div>
+      <StatsSummary
+        title="Performance Summary"
+        stats={summaryStats}
+        className="mt-8"
+      />
     </div>
   );
 };

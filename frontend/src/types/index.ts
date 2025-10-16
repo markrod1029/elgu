@@ -1,4 +1,5 @@
-// src/types/index.ts
+
+// Weather Data Interface
 export interface WeatherData {
   city: string;
   temperature: string;
@@ -11,6 +12,18 @@ export interface NewsItem {
   link: string;
 }
 
+
+// Dashboard Statistics Interface
+export interface DashboardStats {
+  totalBusinesses: number;
+  compliantBusinesses: number;
+  pendingBusinesses: number;
+  nonCompliantBusinesses: number;
+  municipalities: number;
+  growthRate: number;
+}
+
+// Business-Related Interfaces
 export interface Business {
   businessid_: string;
   businessname_: string;
