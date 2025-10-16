@@ -4,7 +4,7 @@ import RegisterPage from '@/pages/Auth/RegisterPage';
 import VerifyPage from '@/pages/Auth/VerifyPage';
 import DashboardPage from '@/pages/Dashboard/Summary/DashboardPage';
 import WeatherPages from '@/pages/Dashboard/Summary/WeatherPages';
-import PlaceholderPage from '@/pages/PlaceholderPage';
+import Error from '@/pages/Error';
 import GISmain from '@/pages/Dashboard/Maps/GISMain';
 import Maps from '@/pages/Dashboard/Maps/Maps';
 import MainLayout from '@/layout/main';
@@ -70,17 +70,21 @@ export const router = createBrowserRouter([
     path: '/calendar',
     element: (
       <MainLayout>
-        <PlaceholderPage />
+        <Error />
       </MainLayout>
     ),
   },
+
+
+
   {
-    path: '/places-to-visit',
+    path: '*',
     element: (
       <MainLayout>
-        <PlaceholderPage />
+        <Error />
       </MainLayout>
     ),
   },
+
 
 ]);
