@@ -139,7 +139,7 @@ const Header = () => {
               <nav className="flex flex-col space-y-2 text-base font-medium text-gray-700">
                 <Link to="/" className="hover:text-red-600">HOME</Link>
                 <Link to="/business-lists" className="hover:text-red-600">BUSINESS LISTS</Link>
-                <Link to="/city-programs" className="hover:text-red-600">BUSINESS REGISTER</Link>
+                <Link to="/business-form" className="hover:text-red-600">BUSINESS REGISTER</Link>
                 <Link to="/maps" className="hover:text-red-600">MAPS</Link>
                 <Link to="/satelite-map" className="hover:text-red-600">SATELLITE IMAGES</Link>
                 <Link to="/media" className="hover:text-red-600">GENERATE REPORT</Link>

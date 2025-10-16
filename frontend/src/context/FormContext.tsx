@@ -1,14 +1,31 @@
+// src/context/FormContext.tsx
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 // Define the shape of your form data
 interface FormData {
+  // Taxpayer Info
+  taxpayerType: string;
+  fullName: string;
+  dob: string;
+  email: string;
+  phone: string;
+  streetAddress: string;
+  city: string;
+  postalCode: string;
+  password: string;
+  confirmPassword: string;
+  terms: boolean;
+  newsletter: boolean;
+  
+  // Business Info
   businessType: string;
   registrationNumber: string;
   tin: string;
   businessName: string;
   tradeName: string;
-  // Add other fields from all steps here...
-  [key: string]: any; // Allow for dynamic properties
+  sameAsBusinessName: boolean;
+  
+  [key: string]: any;
 }
 
 // Define the context shape
@@ -24,11 +41,27 @@ const FormContext = createContext<FormContextType | undefined>(undefined);
 // Create the provider component
 export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [formData, setFormData] = useState<FormData>({
+    // Taxpayer Info defaults
+    taxpayerType: 'individual',
+    fullName: '',
+    dob: '',
+    email: '',
+    phone: '',
+    streetAddress: '',
+    city: '',
+    postalCode: '',
+    password: '',
+    confirmPassword: '',
+    terms: false,
+    newsletter: false,
+    
+    // Business Info defaults
     businessType: 'sole',
     registrationNumber: '',
     tin: '',
     businessName: '',
     tradeName: '',
+    sameAsBusinessName: false,
   });
 
   const updateField = (field: string, value: any) => {

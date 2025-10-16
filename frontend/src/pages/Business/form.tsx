@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import Stepper from '@/components/ui/stepper';
 import BusinessInfo from '@/components/business/BusinessInfo';
-import BusinessOperation from '@/components/business/BusinessOperation';
+import BusinessOperation from '@/components/business/BusinessRequirments';
 import BusinessActivity from '@/components/business/BusinessActivity';
 import OtherInfo from '@/components/business/OtherInfo';
-import Summary from '@/components/business/Summary';
-import BasicRequirements from '@/components/business/BasicRequirements';
+import Summary from '@/components/business/Undertaking';
+import BasicRequirements from '@/components/business/taxpayerInfo';
 import Complete from '@/components/business/Complete';
 
 const BusinessForm: React.FC = () => {
