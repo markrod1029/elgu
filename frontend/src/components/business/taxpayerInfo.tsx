@@ -1,6 +1,6 @@
 // src/components/forms/TaxpayerInfo.tsx
 import React from 'react';
-import { Input } from '@/components/atoms/input';
+import { Input } from '@/components/atoms/Input';
 import { Button } from '@/components/atoms/button';
 import { RadioGroup } from '@/components/atoms/input/radio';
 import { Checkbox } from '@/components/atoms/input/checkbox';
@@ -27,41 +27,41 @@ const LabeledInput: React.FC<{
   required?: boolean;
   error?: string;
   onIconClick?: () => void;
-}> = ({ 
-  label, 
-  id, 
-  value, 
-  onChange, 
-  placeholder, 
-  variant = 'rounded', 
-  icon, 
-  type = 'text', 
-  required = false, 
+}> = ({
+  label,
+  id,
+  value,
+  onChange,
+  placeholder,
+  variant = 'rounded',
+  icon,
+  type = 'text',
+  required = false,
   error,
-  onIconClick 
+  onIconClick
 }) => (
-  <div className="flex flex-col gap-2">
-    <label htmlFor={id} className="text-sm font-semibold text-gray-800">
-      {label} {required && <span className="text-red-500">*</span>}
-    </label>
-    <Input
-      id={id}
-      type={type}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      variant={variant}
-      icon={icon}
-      iconPosition="right"
-      onIconClick={onIconClick}
-      className={cn(
-        error && "border-red-500 focus:ring-red-500 focus:border-red-500",
-        "transition-all duration-200"
-      )}
-    />
-    {error && <p className="text-red-500 text-xs mt-1 flex items-center gap-1">⚠️ {error}</p>}
-  </div>
-);
+    <div className="flex flex-col gap-2">
+      <label htmlFor={id} className="text-sm font-semibold text-gray-800">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      <Input
+        id={id}
+        type={type}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        variant={variant}
+        icon={icon}
+        iconPosition="right"
+        onIconClick={onIconClick}
+        className={cn(
+          error && "border-red-500 focus:ring-red-500 focus:border-red-500",
+          "transition-all duration-200"
+        )}
+      />
+      {error && <p className="text-red-500 text-xs mt-1 flex items-center gap-1">⚠️ {error}</p>}
+    </div>
+  );
 
 // Section wrapper for better organization
 const FormSection: React.FC<{
@@ -80,11 +80,11 @@ const FormSection: React.FC<{
   </div>
 );
 
-const TaxpayerInfo: React.FC<TaxpayerInfoProps> = ({ 
-  nextStep, 
-  prevStep, 
-  currentStep, 
-  totalSteps 
+const TaxpayerInfo: React.FC<TaxpayerInfoProps> = ({
+  nextStep,
+  prevStep,
+  currentStep,
+  totalSteps
 }) => {
   const { formData, updateField } = useForm();
   const [showPassword, setShowPassword] = React.useState(false);
@@ -115,18 +115,18 @@ const TaxpayerInfo: React.FC<TaxpayerInfoProps> = ({
 
       <div className="space-y-8">
         {/* Taxpayer Type Section */}
-        <FormSection 
-          title="Taxpayer Type" 
+        <FormSection
+          title="Taxpayer Type"
           description="Select the type of taxpayer you are registering as"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <RadioGroup
               name="taxpayerType"
               options={[
-                { label: "👤 Individual", value: "individual" },
-                { label: "🏢 Corporation", value: "corporation" },
-                { label: "🤝 Partnership", value: "partnership" },
-                { label: "🔧 Sole Proprietor", value: "sole-proprietor" },
+                { label: "Individual", value: "individual" },
+                { label: " Corporation", value: "corporation" },
+                { label: " Partnership", value: "partnership" },
+                { label: " Sole Proprietor", value: "sole-proprietor" },
               ]}
               selectedValue={formData.taxpayerType}
               onChange={(value) => handleRadioChange('taxpayerType', value)}
@@ -136,8 +136,8 @@ const TaxpayerInfo: React.FC<TaxpayerInfoProps> = ({
         </FormSection>
 
         {/* Personal Information Section */}
-        <FormSection 
-          title="Personal Information" 
+        <FormSection
+          title="Personal Information"
           description="Your basic personal details"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -166,8 +166,8 @@ const TaxpayerInfo: React.FC<TaxpayerInfoProps> = ({
         </FormSection>
 
         {/* Contact Information Section */}
-        <FormSection 
-          title="Contact Information" 
+        <FormSection
+          title="Contact Information"
           description="How we can reach you"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -197,8 +197,8 @@ const TaxpayerInfo: React.FC<TaxpayerInfoProps> = ({
         </FormSection>
 
         {/* Address Information Section */}
-        <FormSection 
-          title="Address Information" 
+        <FormSection
+          title="Address Information"
           description="Your current residential address"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -236,8 +236,8 @@ const TaxpayerInfo: React.FC<TaxpayerInfoProps> = ({
         </FormSection>
 
         {/* Security Section */}
-        <FormSection 
-          title="Security" 
+        <FormSection
+          title="Security"
           description="Create your account credentials"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -311,13 +311,13 @@ const TaxpayerInfo: React.FC<TaxpayerInfoProps> = ({
         >
           ← Back
         </Button>
-        
+
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <Button
             variant="outline"
             className="w-full sm:w-auto px-8 py-3"
           >
-            💾 Save Draft
+            Save Draft
           </Button>
           <Button
             onClick={nextStep}
@@ -335,7 +335,7 @@ const TaxpayerInfo: React.FC<TaxpayerInfoProps> = ({
           <span>{Math.round((currentStep / totalSteps) * 100)}% Complete</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
-          <div 
+          <div
             className="bg-blue-600 h-2 rounded-full transition-all duration-300"
             style={{ width: `${(currentStep / totalSteps) * 100}%` }}
           ></div>

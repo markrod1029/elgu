@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/atoms/button";
-import { Link } from "react-router-dom";
-import { Menu, Cloud, Wind, Sun, CloudRain, CloudDrizzle, Moon, Loader2 } from "lucide-react";
+import { NavLink, Link } from "react-router-dom";
+import { 
+  Menu, Cloud, Wind, Sun, CloudRain, CloudDrizzle, Moon, Loader2 
+} from "lucide-react";
 import { fetchWeather } from "@/services/api/weatherService";
 import type { WeatherData } from '@/types';
 
@@ -33,7 +35,6 @@ const Header = () => {
         setWeatherData(data);
       } catch (error) {
         console.error('Failed to fetch weather data:', error);
-        // Set fallback data if API fails
         setWeatherData({
           city: "Leganes",
           temperature: "N/A",
@@ -46,74 +47,41 @@ const Header = () => {
     };
 
     getWeatherData();
-    
-    // Refresh weather data every 30 minutes
     const interval = setInterval(getWeatherData, 30 * 60 * 1000);
-
     return () => clearInterval(interval);
   }, []);
 
-  // Get appropriate weather icon based on condition
+  // Get appropriate weather icon
   const getWeatherIcon = () => {
-    if (weatherLoading) {
-      return <Loader2 className="h-5 w-5 text-gray-500 animate-spin" />;
-    }
-
-    if (!weatherData || weatherData.temperature === 'N/A') {
-      return <Cloud className="h-5 w-5 text-gray-500" />;
-    }
+    if (weatherLoading) return <Loader2 className="h-5 w-5 text-gray-500 animate-spin" />;
+    if (!weatherData || weatherData.temperature === 'N/A') return <Cloud className="h-5 w-5 text-gray-500" />;
 
     const condition = weatherData.description.toLowerCase();
-
-    if (condition.includes("rain") || condition.includes("shower")) {
-      return <CloudRain className="h-5 w-5 text-blue-500" />;
-    } else if (condition.includes("drizzle") || condition.includes("mist")) {
-      return <CloudDrizzle className="h-5 w-5 text-blue-400" />;
-    } else if (condition.includes("cloud") || condition.includes("overcast")) {
-      return <Cloud className="h-5 w-5 text-gray-500" />;
-    } else if (condition.includes("wind") || condition.includes("breeze")) {
-      return <Wind className="h-5 w-5 text-gray-600" />;
-    } else if (condition.includes("clear") || condition.includes("sunny")) {
-      return <Sun className="h-5 w-5 text-yellow-500" />;
-    } else {
-      return <Sun className="h-5 w-5 text-yellow-500" />;
-    }
+    if (condition.includes("rain") || condition.includes("shower")) return <CloudRain className="h-5 w-5 text-blue-500" />;
+    if (condition.includes("drizzle") || condition.includes("mist")) return <CloudDrizzle className="h-5 w-5 text-blue-400" />;
+    if (condition.includes("cloud") || condition.includes("overcast")) return <Cloud className="h-5 w-5 text-gray-500" />;
+    if (condition.includes("wind") || condition.includes("breeze")) return <Wind className="h-5 w-5 text-gray-600" />;
+    if (condition.includes("clear") || condition.includes("sunny")) return <Sun className="h-5 w-5 text-yellow-500" />;
+    return <Sun className="h-5 w-5 text-yellow-500" />;
   };
 
   // Get weather display values
   const getWeatherDisplay = () => {
     if (weatherLoading) {
-      return {
-        temperature: "Loading...",
-        condition: "Loading weather...",
-        windSpeed: "--"
-      };
+      return { temperature: "Loading...", condition: "Loading weather...", windSpeed: "--" };
     }
-
     if (!weatherData || weatherData.temperature === 'N/A') {
-      return {
-        temperature: "N/A",
-        condition: "Unavailable",
-        windSpeed: "--"
-      };
+      return { temperature: "N/A", condition: "Unavailable", windSpeed: "--" };
     }
-
-    return {
-      temperature: weatherData.temperature,
-      condition: weatherData.description,
-      windSpeed: "12" // You can add wind speed to your WeatherData type if needed
-    };
+    return { temperature: weatherData.temperature, condition: weatherData.description, windSpeed: "12" };
   };
 
   const weatherDisplay = getWeatherDisplay();
 
   // Toggle dark mode
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    if (darkMode) document.documentElement.classList.add("dark");
+    else document.documentElement.classList.remove("dark");
   }, [darkMode]);
 
   return (
@@ -137,12 +105,71 @@ const Header = () => {
               onMouseLeave={() => setOpen(false)}
             >
               <nav className="flex flex-col space-y-2 text-base font-medium text-gray-700">
-                <Link to="/" className="hover:text-red-600">HOME</Link>
-                <Link to="/business-lists" className="hover:text-red-600">BUSINESS LISTS</Link>
-                <Link to="/business-form" className="hover:text-red-600">BUSINESS REGISTER</Link>
-                <Link to="/maps" className="hover:text-red-600">MAPS</Link>
-                <Link to="/satelite-map" className="hover:text-red-600">SATELLITE IMAGES</Link>
-                <Link to="/media" className="hover:text-red-600">GENERATE REPORT</Link>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    `hover:text-red-600 transition ${
+                      isActive ? "text-red-600 font-bold bg-red-50 px-3 py-1 rounded-md" : ""
+                    }`
+                  }
+                >
+                  HOME
+                </NavLink>
+
+                <NavLink
+                  to="/business-lists"
+                  className={({ isActive }) =>
+                    `hover:text-red-600 transition ${
+                      isActive ? "text-red-600 font-bold bg-red-50 px-3 py-1 rounded-md" : ""
+                    }`
+                  }
+                >
+                  BUSINESS LISTS
+                </NavLink>
+
+                <NavLink
+                  to="/business-form"
+                  className={({ isActive }) =>
+                    `hover:text-red-600 transition ${
+                      isActive ? "text-red-600 font-bold bg-red-50 px-3 py-1 rounded-md" : ""
+                    }`
+                  }
+                >
+                  BUSINESS REGISTER
+                </NavLink>
+
+                <NavLink
+                  to="/maps"
+                  className={({ isActive }) =>
+                    `hover:text-red-600 transition ${
+                      isActive ? "text-red-600 font-bold bg-red-50 px-3 py-1 rounded-md" : ""
+                    }`
+                  }
+                >
+                  MAPS
+                </NavLink>
+
+                <NavLink
+                  to="/satelite-map"
+                  className={({ isActive }) =>
+                    `hover:text-red-600 transition ${
+                      isActive ? "text-red-600 font-bold bg-red-50 px-3 py-1 rounded-md" : ""
+                    }`
+                  }
+                >
+                  SATELLITE IMAGES
+                </NavLink>
+
+                <NavLink
+                  to="/media"
+                  className={({ isActive }) =>
+                    `hover:text-red-600 transition ${
+                      isActive ? "text-red-600 font-bold bg-red-50 px-3 py-1 rounded-md" : ""
+                    }`
+                  }
+                >
+                  GENERATE REPORT
+                </NavLink>
               </nav>
             </div>
           )}
@@ -150,8 +177,8 @@ const Header = () => {
 
         {/* LOGO + TITLE */}
         <div className="hidden md:flex items-center gap-2">
-          <img src="/assets/logo.png" alt="Quezon City Logo" className="h-12" />
-          <h1 className="text-2xl font-bold text-gray-700">LGU Province</h1>
+          <img src="/assets/logo.png" alt="Leganes Logo" className="h-12" />
+          <h1 className="text-2xl font-bold text-gray-700">LGU Leganes</h1>
         </div>
       </div>
 
@@ -161,7 +188,6 @@ const Header = () => {
         <Link to="/dashboard-summary">
           {/* Desktop Weather Display */}
           <div className="hidden sm:flex items-center gap-3 bg-gradient-to-r from-blue-50 to-blue-100 px-4 py-2 rounded-lg border border-blue-200">
-            {/* Weather Icon and Temperature */}
             <div className="flex items-center gap-2">
               {getWeatherIcon()}
               <span className="text-lg font-bold text-gray-800">
@@ -169,16 +195,13 @@ const Header = () => {
               </span>
             </div>
 
-            {/* Weather Details */}
             <div className="flex flex-col text-xs text-gray-600 border-l border-blue-200 pl-3">
               <div className="flex items-center gap-1">
                 <Cloud className="h-3 w-3" />
                 <span className="capitalize">{weatherDisplay.condition}</span>
               </div>
               {weatherData?.city && (
-                <div className="text-xs text-gray-500">
-                  {weatherData.city}
-                </div>
+                <div className="text-xs text-gray-500">{weatherData.city}</div>
               )}
             </div>
           </div>
@@ -211,16 +234,6 @@ const Header = () => {
             )}
           </span>
         </button>
-
-        {/* SEARCH BAR - Placeholder for future implementation */}
-        <div className="relative">
-          {/* <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search..."
-            className="pl-8 pr-4 py-2 rounded-full border-2"
-          /> */}
-        </div>
       </div>
     </header>
   );

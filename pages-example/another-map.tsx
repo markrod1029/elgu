@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { MapPin, Filter, Clock, XCircle, Building, CheckCircle } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { MapPin, Filter } from 'lucide-react';
 import { Typography } from '@/components/atoms/typography';
-import { Card } from '@/components/atoms/card';
-import { BusinessDetailsPanel } from '@/components/organisms/BusinessDetailsPanel';
 import { BusinessService } from '@/hooks/businessService';
+import type { Business, BusinessDetails } from '@/types';
+import type { MapMarker } from '@/utils/map';
 import { useGoogleMapsLoader } from '@/services/useGoogleMapsLoader';
 import { flagIcons } from '@/utils/mapConstants';
-import type { Business, BusinessDetails, MapMarker } from '@/types';
-import { StatCard } from '@/components/molecules/card/statCard';
+import { BusinessDetailsPanel } from '@/components/organisms/BusinessDetailsPanel';
+import { Card } from '@/components/atoms/card';
 
 interface MapsProps {
   complianceFilter?: string;
@@ -23,48 +23,48 @@ const Maps: React.FC<MapsProps> = ({ complianceFilter = '' }) => {
   const [googleMap, setGoogleMap] = useState<google.maps.Map | null>(null);
   const [streetView, setStreetView] = useState<google.maps.StreetViewPanorama | null>(null);
   const [googleMarkers, setGoogleMarkers] = useState<google.maps.Marker[]>([]);
-  const [currentFilter, setCurrentFilter] = useState(complianceFilter);
 
   const { isLoaded, error } = useGoogleMapsLoader();
 
-  // Load businesses based on filter
-  const loadBusinesses = useCallback(async (filter: string = '') => {
-    try {
-      const data = filter && filter !== 'all'
-        ? await BusinessService.getFilteredBusinesses(filter)
-        : await BusinessService.getAllBusinesses();
-
-      setBusinesses(data);
-      createMarkers(data);
-    } catch (error) {
-      console.error('Error loading businesses:', error);
-    }
-  }, []);
-
-  // Handle filter changes
-  const handleFilterChange = (filter: string) => {
-    setCurrentFilter(filter === 'all' ? '' : filter);
-    loadBusinesses(filter === 'all' ? '' : filter);
-  };
-
-  // Load businesses when component mounts or filter changes
   useEffect(() => {
-    loadBusinesses(complianceFilter);
-  }, [complianceFilter, loadBusinesses]);
+    if (complianceFilter) {
+      loadFilteredBusinesses(complianceFilter);
+    } else {
+      loadAllBusinesses();
+    }
+  }, [complianceFilter]);
 
-  // Initialize map when Google Maps loads
   useEffect(() => {
     if (isLoaded && mapRef.current) {
       initializeMap();
     }
   }, [isLoaded]);
 
-  // Create markers on map when businesses or map changes
   useEffect(() => {
     if (isLoaded && googleMap && businesses.length > 0) {
       createMarkersOnMap();
     }
   }, [isLoaded, googleMap, businesses]);
+
+  const loadAllBusinesses = async () => {
+    try {
+      const data = await BusinessService.getAllBusinesses();
+      setBusinesses(data);
+      createMarkers(data);
+    } catch (error) {
+      console.error('Error loading businesses:', error);
+    }
+  };
+
+  const loadFilteredBusinesses = async (filter: string) => {
+    try {
+      const data = await BusinessService.getFilteredBusinesses(filter);
+      setBusinesses(data);
+      createMarkers(data);
+    } catch (error) {
+      console.error('Error loading filtered businesses:', error);
+    }
+  };
 
   const createMarkers = (businessData: Business[]) => {
     const today = new Date();
@@ -118,14 +118,12 @@ const Maps: React.FC<MapsProps> = ({ complianceFilter = '' }) => {
     setStreetView(streetViewPanorama);
     setGoogleMap(map);
 
-    // Add global function for info window buttons
     (window as any).showFullInfoPopup = showFullInfoPopup;
   };
 
   const createMarkersOnMap = () => {
     if (!googleMap || !window.google) return;
 
-    // Clear existing markers
     googleMarkers.forEach(marker => marker.setMap(null));
     const newGoogleMarkers: google.maps.Marker[] = [];
 
@@ -178,6 +176,7 @@ const Maps: React.FC<MapsProps> = ({ complianceFilter = '' }) => {
           infoWindow.open(googleMap, marker);
           showFullInfoPopup(markerData.businessId);
         } else {
+          if (clickTimer) clearTimeout(clickTimer);
           clickTimer = setTimeout(() => { clickCount = 0; }, 500);
         }
       });
@@ -219,9 +218,9 @@ const Maps: React.FC<MapsProps> = ({ complianceFilter = '' }) => {
         <div className="max-w-md w-full bg-white rounded-lg shadow-lg border border-red-200 p-6">
           <div className="flex items-center gap-3 text-red-600 mb-4">
             <MapPin size={24} />
-            <Typography as="h2" variant="h4" weight="semibold">Maps Error</Typography>
+            <h2 className="text-xl font-semibold">Maps Error</h2>
           </div>
-          <Typography as="p" variant="p" className="text-gray-700">{error}</Typography>
+          <p className="text-gray-700">{error}</p>
         </div>
       </div>
     );
@@ -229,57 +228,27 @@ const Maps: React.FC<MapsProps> = ({ complianceFilter = '' }) => {
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
-      {/* Header Section */}
-      <Card variant="default" padding="lg" className="mb-5">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0">
-          <div className="flex-1">
-            <Typography variant="h1" as="h1" weight="bold" className="text-2xl text-gray-900 mb-1">
-              Leganes Business Map
-            </Typography>
-            <Typography variant="p" className="text-gray-600">
-              View the geographical distribution of registered businesses in Leganes and monitor their compliance status in real time.
-            </Typography>
-          </div>
+      {/* Header */}
+
+      {/* 🔹 Header */}
+      <Card variant="default" padding="lg" className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0 mb-5">
+        <div>
+          <Typography variant="h1" as="h1" weight="bold" className="text-2xl text-gray-900 mb-1">
+            Leganes Business Map
+          </Typography>
+          <Typography variant="p" className="text-gray-600">
+            View the geographical distribution of registered businesses in Leganes and monitor their compliance status in real time.
+          </Typography>
+
+
+        </div>
+        <div className="flex items-center space-x-3">
+          {/* Download Dropdown */}
+
 
         </div>
       </Card>
 
-
-
-      {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-
-        <StatCard
-          title="All Business"
-          value='1'
-          icon={Building}
-          color="default"
-        />
-
-        <StatCard
-          title="Pending"
-          value='1'
-          icon={Clock}
-          color="yellow"
-        />
-
-        <StatCard
-          title="Compliant"
-          value='1'
-          icon={CheckCircle}
-          color="green"
-        />
-
-        <StatCard
-          title="Non-Compliant"
-          value='1'
-          icon={XCircle}
-
-          color="red"
-        />
-
-
-      </div>
 
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 py-4 gap-3">
@@ -295,11 +264,11 @@ const Maps: React.FC<MapsProps> = ({ complianceFilter = '' }) => {
             <div className="flex items-center gap-2">
               <Filter size={16} className="text-gray-600" />
               <select
-                className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                onChange={(e) => handleFilterChange(e.target.value)}
-                value={currentFilter || 'all'}
+                className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={(e) => loadFilteredBusinesses(e.target.value)}
+                value={complianceFilter}
               >
-                <option value="all">All Businesses</option>
+                <option value="">All Businesses</option>
                 <option value="compliant">Compliant</option>
                 <option value="noncompliant">Non-Compliant</option>
                 <option value="pending">Pending</option>
@@ -321,7 +290,9 @@ const Maps: React.FC<MapsProps> = ({ complianceFilter = '' }) => {
             <div className="bg-white border border-gray-200 rounded-lg px-3 py-1 shadow-sm">
               <Typography as="div" variant="small" weight="medium" className="text-gray-800">
                 Total Businesses:{" "}
-                <Typography as="span" weight="bold">{businesses.length}</Typography>
+                <Typography as="span" weight="bold">
+                  {businesses.length}
+                </Typography>
               </Typography>
             </div>
           </div>
@@ -329,56 +300,58 @@ const Maps: React.FC<MapsProps> = ({ complianceFilter = '' }) => {
       </header>
 
 
-      {/* Map Container */}
-      <div className="flex-1 flex relative">
-        {/* Map View Controls */}
-        <div className="absolute top-18 left-4 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-3">
-          <Typography as="div" variant="small" weight="medium" className="text-gray-700 mb-2 block">
-            Map View:
-          </Typography>
-          <select
-            value={mapView}
-            onChange={(e) => handleMapViewChange(e.target.value as any)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="roadmap">Roadmap</option>
-            <option value="satellite">Satellite</option>
-            <option value="terrain">Terrain</option>
-            <option value="streetview">Street View</option>
-          </select>
+      {/* Main Content */}
+      <div className="flex-1 flex">
+        {/* Map Container */}
+        <div className="flex-1 relative">
+          {/* Map View Controls */}
+          <div className="absolute top-4 left-4 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-3">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Map View:</label>
+            <select
+              value={mapView}
+              onChange={(e) => handleMapViewChange(e.target.value as any)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="roadmap">Roadmap</option>
+              <option value="satellite">Satellite</option>
+              <option value="terrain">Terrain</option>
+              <option value="streetview">Street View</option>
+            </select>
+          </div>
+
+          {/* Map */}
+          <div ref={mapRef} className="w-full h-full" />
+
+          {/* Loading Overlay */}
+          {!isLoaded && (
+            <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                <Typography as="p" variant="large" className="mt-4 text-gray-600">
+                  Loading Maps...
+                </Typography>
+              </div>
+            </div>
+          )}
+
+          {/* No Data Message */}
+          {isLoaded && businesses.length === 0 && (
+            <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center">
+              <div className="text-center">
+                <Typography as="p" variant="small" className="text-gray-600">
+                  No business data available
+                </Typography>
+                <button
+                  onClick={loadAllBusinesses}
+                  className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  Reload Data
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Map */}
-        <div ref={mapRef} className="w-full h-full" />
-
-        {/* Loading Overlay */}
-        {!isLoaded && (
-          <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-20">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-              <Typography as="p" variant="large" className="mt-4 text-gray-600">
-                Loading Maps...
-              </Typography>
-            </div>
-          </div>
-        )}
-
-        {/* No Data Message */}
-        {isLoaded && businesses.length === 0 && (
-          <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-20">
-            <div className="text-center">
-              <Typography as="p" variant="small" className="text-gray-600 mb-4">
-                No business data available
-              </Typography>
-              <button
-                onClick={() => loadBusinesses(currentFilter)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-              >
-                Reload Data
-              </button>
-            </div>
-          </div>
-        )}
         {/* Business Details Panel */}
         {showDetails && selectedBusiness && (
           <BusinessDetailsPanel
@@ -386,30 +359,32 @@ const Maps: React.FC<MapsProps> = ({ complianceFilter = '' }) => {
             onClose={() => setShowDetails(false)}
           />
         )}
-        {/* Legend */}
-        <div className="absolute bottom-4 left-4 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-3">
-          <Typography as="h4" variant="small" weight="semibold" className="text-gray-800 mb-2">
-            Legend
-          </Typography>
-          <div className="space-y-1 text-xs">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
-              <Typography as="span">Compliant</Typography>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-              <Typography as="span">Pending</Typography>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500"></div>
-              <Typography as="span">Non-Compliant</Typography>
-            </div>
+      </div>
+
+      {/* Legend */}
+      <div className="absolute bottom-4 left-4 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-3">
+        <Typography as="h4" variant="small" weight="semibold" className="text-gray-800 mb-2">
+          Legend
+        </Typography>
+        <div className="space-y-1 text-xs">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+            <Typography as="span">Compliant</Typography>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+            <Typography as="span">Pending</Typography>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-red-500"></div>
+            <Typography as="span">Non-Compliant</Typography>
           </div>
         </div>
       </div>
 
 
     </div>
+
   );
 };
 

@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/atoms/button';
 import { Input } from '@/components/atoms/Input';
 import { FcGoogle } from "react-icons/fc";
 import { Mail, Eye, EyeClosed } from 'lucide-react';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false); // Add this state
@@ -55,7 +56,7 @@ const LoginPage = () => {
               Forgot password?
             </Link>
           </div>
-          <Button type="submit" className="w-full rounded-full">
+          <Button  onClick={() => navigate('/')} type="submit" className="w-full rounded-full">
             Login
           </Button>
         </form>
@@ -66,7 +67,7 @@ const LoginPage = () => {
         <Button variant="outline" className="rounded-full w-full hover:bg-red-600 hover:border-red-600">
           <FcGoogle size={20} /> Mag-sign in sa Google
         </Button>
-        <div className="text-center">
+        <div className="text-center ">
           <p>
             Don't have an account yet?{' '}
             <Link to="/register" className="font-medium text-blue-600 hover:underline">
@@ -81,7 +82,7 @@ const LoginPage = () => {
           </Link>
         </div> */}
       </div>
-     <div className="absolute bottom-0 w-full mt-5">
+     <div className="absolute bottom-0 w-full relative top-7">
         <img
           src="/assets/cityhall-desktop.png"
           alt="Footer illustration"

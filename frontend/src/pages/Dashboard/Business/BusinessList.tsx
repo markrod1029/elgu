@@ -1,9 +1,10 @@
 // src/components/pages/BusinessManagementPage.tsx
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/atoms/button';
 import { Card } from '@/components/atoms/card';
 import { Typography } from '@/components/atoms/typography';
-import { Icon } from '@/components/atoms/icon';
+// import { Icon } from '@/components/atoms/icon';
 import { StatCard } from '@/components/molecules/card/statCard';
 import { DataTable } from '@/components/molecules/tables/datatables'
 import { Download, Plus, CheckCircle, Clock, XCircle, MapPin } from 'lucide-react';
@@ -24,6 +25,7 @@ export interface Business {
 }
 
 const BusinessManagementPage: React.FC = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -121,7 +123,7 @@ const BusinessManagementPage: React.FC = () => {
 
   };
 
-  // 🧾 TABLE COLUMNS
+  // TABLE COLUMNS
   const tableColumns = [
     { key: 'name', label: 'Business Name', sortable: true },
     { key: 'type', label: 'Type', sortable: true },
@@ -144,7 +146,7 @@ const BusinessManagementPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50 p-6">
       <div className=" mx-auto space-y-6">
 
-           {/* 🔹 Header */}
+        {/* 🔹 Header */}
         <Card variant="default" padding="lg" className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0">
           <div>
             <Typography variant="h1" as="h1" weight="bold" className="text-2xl text-gray-900 mb-1">
@@ -176,12 +178,14 @@ const BusinessManagementPage: React.FC = () => {
             </div>
 
             {/* Add Button */}
-            <Button variant="default" className="flex items-center gap-2">
+            <Button
+              onClick={() => navigate('/business-form')}
+              variant="default" className="flex items-center gap-2">
               <Plus size={16} /> Add
             </Button>
           </div>
         </Card>
-        
+
 
         {/* 🔹 Stat Cards Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -218,7 +222,7 @@ const BusinessManagementPage: React.FC = () => {
         </div>
 
 
-     
+
 
         {/* 🔹 Search */}
         <Card variant="default" padding="md">

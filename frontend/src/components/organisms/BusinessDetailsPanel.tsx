@@ -1,7 +1,7 @@
 import React from 'react';
 import { Building, User, Map, X } from 'lucide-react';
 import { Typography } from '@/components/atoms/typography';
-import type { BusinessDetails } from '@/types/business';
+import type { BusinessDetails } from '@/types';
 
 interface BusinessDetailsPanelProps {
   selectedBusiness: BusinessDetails;
@@ -12,145 +12,146 @@ export const BusinessDetailsPanel: React.FC<BusinessDetailsPanelProps> = ({
   selectedBusiness,
   onClose
 }) => {
+  const renderInfoSection = (
+    title: string,
+    icon: React.ReactNode,
+    data: Record<string, any> | null,
+    fields: string[]
+  ) => {
+    if (!data) return null;
+
+    return (
+      <div>
+        <Typography as="h3" variant="large" weight="semibold" className="flex items-center gap-2 mb-3">
+          {icon}
+          {title}
+        </Typography>
+        <div className="space-y-2 text-sm">
+          {fields.map((field) => {
+            const value = data[field];
+            if (!value) return null;
+            
+            const fieldLabel = field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            
+            return (
+              <div key={field} className="grid grid-cols-2 gap-2">
+                <Typography as="span" weight="medium" className="text-gray-600">
+                  {fieldLabel}:
+                </Typography>
+                <Typography as="span">{value}</Typography>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  const renderAddressSection = (address: any) => {
+    if (!address) return null;
+
+    return (
+      <div>
+        <Typography as="h3" variant="large" weight="semibold" className="flex items-center gap-2 mb-3">
+          <Map size={16} />
+          Address Information
+        </Typography>
+        <div className="space-y-2 text-sm">
+          <Typography as="div">
+            <strong>Address:</strong> {address.houseno_} {address.street_}, {address.barangay_}
+          </Typography>
+          <Typography as="div">
+            <strong>Municipality:</strong> {address.municipality_}
+          </Typography>
+          <Typography as="div">
+            <strong>Province:</strong> {address.province_}
+          </Typography>
+          {address.cellno_ && (
+            <Typography as="div">
+              <strong>Mobile:</strong> {address.cellno_}
+            </Typography>
+          )}
+          {address.email_ && (
+            <Typography as="div">
+              <strong>Email:</strong> {address.email_}
+            </Typography>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const renderRepresentativeSection = (representative: any) => {
+    if (!representative) return null;
+
+    return (
+      <div>
+        <Typography as="h3" variant="large" weight="semibold" className="flex items-center gap-2 mb-3">
+          <User size={16} />
+          Representative Information
+        </Typography>
+        <div className="space-y-2 text-sm">
+          <Typography as="div">
+            <strong>Name:</strong> {representative.repname_}
+          </Typography>
+          <Typography as="div">
+            <strong>Position:</strong> {representative.repposition_}
+          </Typography>
+          {representative.cellno_ && (
+            <Typography as="div">
+              <strong>Contact:</strong> {representative.cellno_}
+            </Typography>
+          )}
+          {representative.email_ && (
+            <Typography as="div">
+              <strong>Email:</strong> {representative.email_}
+            </Typography>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="w-96 bg-white border-l border-gray-200 overflow-y-auto">
-      <div className="p-4 border-b border-gray-200">
+    <div className="w-96 bg-white border-l border-gray-200 overflow-y-auto shadow-lg">
+      {/* Header */}
+      <div className="p-4 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center justify-between">
-          <Typography as="h2" variant="large" className="text-gray-800">
+          <Typography as="h2" variant="h4" weight="semibold" className="text-gray-800">
             Business Details
           </Typography>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-gray-100 rounded"
+            className="p-1 hover:bg-gray-200 rounded transition-colors"
+            aria-label="Close panel"
           >
-            <X size={16} className="text-gray-600" />
+            <X size={18} className="text-gray-600" />
           </button>
         </div>
       </div>
 
+      {/* Content */}
       <div className="p-4 space-y-6">
         {/* Business Information */}
-        {selectedBusiness.businessInfo && (
-          <div>
-            <Typography as="h3" variant="large" weight="semibold" className="flex items-center gap-2 mb-3">
-              <Building size={16} />
-              Business Information
-            </Typography>
-            <div className="space-y-2 text-sm">
-              <div className="grid grid-cols-2 gap-2">
-                <Typography as="span" weight="medium" className="text-gray-600">Business ID:</Typography>
-                <Typography as="span">{selectedBusiness.businessInfo.businessid_}</Typography>
-                
-                <Typography as="span" weight="medium" className="text-gray-600">Business Name:</Typography>
-                <Typography as="span">{selectedBusiness.businessInfo.businessname_}</Typography>
-                
-                <Typography as="span" weight="medium" className="text-gray-600">Date Established:</Typography>
-                <Typography as="span">{selectedBusiness.businessInfo.dateestablished_}</Typography>
-                
-                <Typography as="span" weight="medium" className="text-gray-600">Ownership Type:</Typography>
-                <Typography as="span">{selectedBusiness.businessInfo.ownershiptype_}</Typography>
-                
-                <Typography as="span" weight="medium" className="text-gray-600">Trade Name:</Typography>
-                <Typography as="span">{selectedBusiness.businessInfo.tradename_}</Typography>
-              </div>
-            </div>
-          </div>
+        {renderInfoSection(
+          "Business Information",
+          <Building size={16} />,
+          selectedBusiness.businessInfo,
+          ['businessid_', 'businessname_', 'dateestablished_', 'ownershiptype_', 'tradename_']
         )}
 
         {/* Address Information */}
-        {selectedBusiness.address && (
-          <div>
-            <Typography as="h3" variant="large" weight="semibold" className="flex items-center gap-2 mb-3">
-              <Map size={16} />
-              Address Information
-            </Typography>
-            <div className="space-y-2 text-sm">
-              <Typography as="div">
-                <strong>Address:</strong> {selectedBusiness.address.houseno_} {selectedBusiness.address.street_}, {selectedBusiness.address.barangay_}
-              </Typography>
-              <Typography as="div">
-                <strong>Municipality:</strong> {selectedBusiness.address.municipality_}
-              </Typography>
-              <Typography as="div">
-                <strong>Province:</strong> {selectedBusiness.address.province_}
-              </Typography>
-              {selectedBusiness.address.cellno_ && (
-                <Typography as="div">
-                  <strong>Mobile:</strong> {selectedBusiness.address.cellno_}
-                </Typography>
-              )}
-              {selectedBusiness.address.email_ && (
-                <Typography as="div">
-                  <strong>Email:</strong> {selectedBusiness.address.email_}
-                </Typography>
-              )}
-            </div>
-          </div>
-        )}
+        {renderAddressSection(selectedBusiness.address)}
 
         {/* Representative Information */}
-        {selectedBusiness.representative && (
-          <div>
-            <Typography as="h3" variant="large" weight="semibold" className="flex items-center gap-2 mb-3">
-              <User size={16} />
-              Representative Information
-            </Typography>
-            <div className="space-y-2 text-sm">
-              <Typography as="div">
-                <strong>Name:</strong> {selectedBusiness.representative.repname_}
-              </Typography>
-              <Typography as="div">
-                <strong>Position:</strong> {selectedBusiness.representative.repposition_}
-              </Typography>
-              {selectedBusiness.representative.cellno_ && (
-                <Typography as="div">
-                  <strong>Contact:</strong> {selectedBusiness.representative.cellno_}
-                </Typography>
-              )}
-              {selectedBusiness.representative.email_ && (
-                <Typography as="div">
-                  <strong>Email:</strong> {selectedBusiness.representative.email_}
-                </Typography>
-              )}
-            </div>
-          </div>
-        )}
+        {renderRepresentativeSection(selectedBusiness.representative)}
 
         {/* Requirements Information */}
-        {selectedBusiness.requirements && (
-          <div>
-            <Typography as="h3" variant="large" weight="semibold" className="mb-3">
-              Business Requirements
-            </Typography>
-            <div className="space-y-2 text-sm">
-              <div className="grid grid-cols-2 gap-2">
-                {selectedBusiness.requirements.dtino_ && (
-                  <>
-                    <Typography as="span" weight="medium" className="text-gray-600">DTI No:</Typography>
-                    <Typography as="span">{selectedBusiness.requirements.dtino_}</Typography>
-                  </>
-                )}
-                {selectedBusiness.requirements.dtiexpiry_ && (
-                  <>
-                    <Typography as="span" weight="medium" className="text-gray-600">DTI Expiry:</Typography>
-                    <Typography as="span">{selectedBusiness.requirements.dtiexpiry_}</Typography>
-                  </>
-                )}
-                {selectedBusiness.requirements.secno_ && (
-                  <>
-                    <Typography as="span" weight="medium" className="text-gray-600">SEC No:</Typography>
-                    <Typography as="span">{selectedBusiness.requirements.secno_}</Typography>
-                  </>
-                )}
-                {selectedBusiness.requirements.secexpiry_ && (
-                  <>
-                    <Typography as="span" weight="medium" className="text-gray-600">SEC Expiry:</Typography>
-                    <Typography as="span">{selectedBusiness.requirements.secexpiry_}</Typography>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
+        {renderInfoSection(
+          "Business Requirements",
+          null,
+          selectedBusiness.requirements,
+          ['dtino_', 'dtiexpiry_', 'secno_', 'secexpiry_', 'cdano_', 'cdaexpiry_']
         )}
       </div>
     </div>

@@ -243,7 +243,7 @@ const Summary: React.FC<SummaryProps> = ({ prevStep, currentStep, totalSteps, on
             variant="outline"
             className="w-full sm:w-auto px-8 py-3"
           >
-            💾 Save Draft
+             Save Draft
           </Button>
           <Button
             onClick={handleSubmit}

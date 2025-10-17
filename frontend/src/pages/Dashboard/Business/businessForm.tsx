@@ -66,7 +66,7 @@ const BusinessForm: React.FC = () => {
         </div>
       </Card>
 
-      <div className="mx-auto bg-white p-8 rounded-lg shadow-sm">
+      <div className="mx-auto bg-white p-8 ">
         <div className="mb-8 overflow-x-auto">
           <Stepper steps={steps} currentStep={currentStep} />
         </div>

@@ -39,6 +39,10 @@ export interface Business {
   cdaexpiry_: string | null;
 }
 
+ export interface MapsProps {
+  complianceFilter?: string;
+}
+
 export interface BusinessNameInfo {
   businessid_: string;
   ismain_: boolean;
@@ -82,4 +86,13 @@ export interface BusinessDetails {
   address?: BusinessAddress;
   representative?: BusinessRepresentative;
   requirements?: BusinessRequirements;
+}
+
+export interface DashboardStats {
+  totalBusinesses: number;
+  compliantBusinesses: number;
+  pendingBusinesses: number;
+  nonCompliantBusinesses: number;
+  municipalities: number;
+  growthRate: number;
 }

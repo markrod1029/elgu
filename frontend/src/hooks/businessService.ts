@@ -1,10 +1,10 @@
-import type { 
-  Business, 
-  BusinessDetails, 
-//   BusinessNameInfo, 
-//   BusinessAddress, 
-//   BusinessRepresentative, 
-//   BusinessRequirements 
+import type {
+  Business,
+  BusinessDetails,
+  //   BusinessNameInfo, 
+  //   BusinessAddress, 
+  //   BusinessRepresentative, 
+  //   BusinessRequirements 
 } from '@/types/index';
 
 // Shorter dummy data
@@ -140,6 +140,10 @@ export class BusinessService {
     const today = new Date();
 
     switch (complianceFilter.toLowerCase()) {
+      case 'all':
+        // Show everything: compliant, noncompliant, and pending
+        return allBusinesses;
+
       case 'compliant':
         return allBusinesses.filter(business => {
           const dtiExpiry = business.dtiexpiry_ ? new Date(business.dtiexpiry_) : today;
@@ -148,6 +152,7 @@ export class BusinessService {
           const pendingThreshold = new Date(today);
           pendingThreshold.setDate(pendingThreshold.getDate() + 30);
 
+          // All expiry dates are beyond the pending threshold → compliant
           return dtiExpiry >= pendingThreshold && secExpiry >= pendingThreshold && cdaExpiry >= pendingThreshold;
         });
 
@@ -157,6 +162,7 @@ export class BusinessService {
           const secExpiry = business.secexpiry_ ? new Date(business.secexpiry_) : today;
           const cdaExpiry = business.cdaexpiry_ ? new Date(business.cdaexpiry_) : today;
 
+          // Any expiry date is already past → noncompliant
           return dtiExpiry < today || secExpiry < today || cdaExpiry < today;
         });
 
@@ -168,6 +174,7 @@ export class BusinessService {
           const pendingThreshold = new Date(today);
           pendingThreshold.setDate(pendingThreshold.getDate() + 30);
 
+          // Within next 30 days (not yet expired but close) → pending
           return !(dtiExpiry >= pendingThreshold && secExpiry >= pendingThreshold && cdaExpiry >= pendingThreshold) &&
             (dtiExpiry >= today || secExpiry >= today || cdaExpiry >= today);
         });
@@ -175,5 +182,6 @@ export class BusinessService {
       default:
         return allBusinesses;
     }
+
   }
 }

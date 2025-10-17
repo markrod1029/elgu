@@ -8,10 +8,11 @@ import { cn } from "@/lib/utils"
 const statCardVariants = cva("", {
     variants: {
         variant: {
-            default: "",
+            default: "text-blue-600",
             trend: "flex items-center text-sm",
         },
         color: {
+            default: "text-gray-600",
             blue: "text-blue-600",
             green: "text-green-600",
             yellow: "text-yellow-600",

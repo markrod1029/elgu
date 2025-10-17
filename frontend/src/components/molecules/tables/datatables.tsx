@@ -5,6 +5,8 @@ import { Button } from '@/components/atoms/button';
 import { Typography } from '@/components/atoms/typography';
 import { Icon } from '@/components/atoms/icon';
 
+import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+
 export interface Column {
   key: string;
   label: string;
@@ -43,9 +45,9 @@ export const DataTable: React.FC<DataTableProps> = ({
 }) => {
   const getSortIcon = (columnKey: string) => {
     if (!sortConfig || sortConfig.key !== columnKey) {
-      return '↕️';
+      return <ArrowUpDown className="h-3 " />;
     }
-    return sortConfig.direction === 'asc' ? '↑' : '↓';
+    return sortConfig.direction === 'asc' ? <ArrowUp className="h-3 " /> : <ArrowDown className="h-3 " />;
   };
 
   return (
@@ -57,9 +59,8 @@ export const DataTable: React.FC<DataTableProps> = ({
               {columns.map((column) => (
                 <th
                   key={column.key}
-                  className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
-                    column.sortable ? 'cursor-pointer hover:bg-gray-100' : ''
-                  }`}
+                  className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${column.sortable ? 'cursor-pointer hover:bg-gray-100' : ''
+                    }`}
                   onClick={() => column.sortable && onSort(column.key)}
                 >
                   <div className="flex items-center space-x-1">
@@ -91,7 +92,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                 <td colSpan={columns.length} className="px-6 py-24 text-center">
                   {emptyState || (
                     <div className="flex flex-col items-center justify-center text-gray-500">
-                      <Icon icon="📊" size="2xl" className="mb-4" />
+                      {/* <Icon icon="📊" size="xl" className="mb-4" /> */}
                       <Typography variant="h3" className="mb-2">
                         No data found
                       </Typography>
